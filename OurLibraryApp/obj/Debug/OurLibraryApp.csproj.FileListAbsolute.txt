@@ -1,0 +1,8 @@
+c:\users\fajar\documents\visual studio 2015\Projects\OurLibraryApp\OurLibraryApp\bin\Debug\OurLibraryApp.exe.config
+c:\users\fajar\documents\visual studio 2015\Projects\OurLibraryApp\OurLibraryApp\bin\Debug\OurLibraryApp.exe
+c:\users\fajar\documents\visual studio 2015\Projects\OurLibraryApp\OurLibraryApp\bin\Debug\OurLibraryApp.pdb
+c:\users\fajar\documents\visual studio 2015\Projects\OurLibraryApp\OurLibraryApp\obj\Debug\OurLibraryApp.csprojResolveAssemblyReference.cache
+c:\users\fajar\documents\visual studio 2015\Projects\OurLibraryApp\OurLibraryApp\obj\Debug\OurLibraryApp.exe
+c:\users\fajar\documents\visual studio 2015\Projects\OurLibraryApp\OurLibraryApp\obj\Debug\OurLibraryApp.pdb
+c:\users\fajar\documents\visual studio 2015\Projects\OurLibraryApp\OurLibraryApp\bin\Debug\Newtonsoft.Json.dll
+c:\users\fajar\documents\visual studio 2015\Projects\OurLibraryApp\OurLibraryApp\bin\Debug\Newtonsoft.Json.xml
