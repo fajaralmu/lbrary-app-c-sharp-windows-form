@@ -49,10 +49,9 @@ namespace OurLibraryApp.Src.App.Access
             // Close the response.  
             response.Close();
             Console.WriteLine("response " + ((HttpWebResponse)response).StatusDescription);
-            JObject obj =  (JObject) JsonConvert.DeserializeObject(responseFromServer);
-           
-            Console.WriteLine(obj["login"]);
-            return StringUtil.JSONObjectToMap(obj);
+            
+          
+            return StringUtil.JSONStringToMap(responseFromServer);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,17 +25,37 @@ namespace OurLibraryApp.Src.App.Utils
             return QueryString;
         }
 
-        public static Dictionary<string, object> JSONObjectToMap(JObject JSONObj)
+        public static Dictionary<string, object> JSONStringToMap(string JSONString)
         {
-            Console.WriteLine("==========BEGIN::JSONObject to MAP=======");
-            Dictionary<string, object> Dict = new Dictionary<string, object>();
-            foreach (JProperty key in JSONObj.Properties())
+            object JObject = JsonConvert.DeserializeObject(JSONString);
+            if (JObject.GetType().Equals(typeof(JArray)))
             {
-                Console.WriteLine(key.Name.ToString() + "-> " + key.Value+" | "+ key.Value.GetType());
-                Dict.Add(key.Name, key.Value);
+                JArray ObjList = (JArray)JObject;
+                Dictionary<string, object> ArrayMap = new Dictionary<string, object>();
+                List<Dictionary<string, object>> Array = new List<Dictionary<string, object>>();
+                for (int i = 0; i < ObjList.Count; i++)
+                {
+                    JToken Element = ObjList.ElementAt(i);
+                    // Console.Write("element to String " + Element.ToString());
+                    Dictionary<string, object> ElementMap = JSONStringToMap(Element.ToString());
+                    Array.Add(ElementMap);
+                }
+                ArrayMap.Add("Array", Array);
+                return ArrayMap;
             }
-            Console.WriteLine("==========END::JSONObject to MAP=======");
-            return Dict;
+            else
+            {
+                JObject JSONObj = (JObject)JObject;
+                Console.WriteLine("==========BEGIN::JSONObject to MAP=======");
+                Dictionary<string, object> Dict = new Dictionary<string, object>();
+                foreach (JProperty key in JSONObj.Properties())
+                {
+                    Console.WriteLine(key.Name.ToString() + "-> " + key.Value + " | " + key.Value.GetType());
+                    Dict.Add(key.Name, key.Value);
+                }
+                Console.WriteLine("==========END::JSONObject to MAP=======");
+                return Dict;
+            }
         }
     }
 }

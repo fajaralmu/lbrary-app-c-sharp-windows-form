@@ -35,7 +35,7 @@ namespace OurLibrary.Models
         [FieldAttribute(Required = false, FieldType = AttributeConstant.TYPE_TEXTAREA)]
         public string additional_info { get; set; }
         [FieldAttribute(Required = true, FieldType = AttributeConstant.TYPE_DROPDOWN, DropDownValues = new object[] { 0, 1 }, DropDownItemName = new object[] { "unavailable", "available" })]
-        public Nullable<short> available { get; set; }
+        public int available { get; set; }
 
         public virtual book book { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

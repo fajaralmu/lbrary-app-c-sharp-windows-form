@@ -10,7 +10,7 @@ namespace OurLibraryApp.Src.App.Utils
 {
     class ControlUtil
     {
-        public static Panel PopulatePanel(int Col, Control[] Controls, int Margin, int W, int H, Color c)
+        public static Panel PopulatePanel(int Col, Control[] Controls, int Margin, int W, int H, Color c, int panelX = 0, int panelY =0, int panelW =0, int panelH=0)
         {
             Panel Panel = new Panel();
             int CurrentCol = 0;
@@ -33,7 +33,16 @@ namespace OurLibraryApp.Src.App.Utils
             }
 
             Panel.BackColor = c;
-            Panel.SetBounds(Margin, Margin, Col * W + Col * Margin, (CurrentRow + 1) * H + (CurrentRow + 1) * Margin);
+            int X = panelX == 0 ? Margin : panelX;
+            int Y = panelY == 0 ? Margin : panelY;
+            int finalW = panelW != 0 ? panelW : Col * W + Col * Margin;
+            int finalH = panelH != 0 ? panelH : (CurrentRow + 1) * H + (CurrentRow + 1) * Margin;
+            Panel.SetBounds(X, Y, finalW, finalH);
+            Panel.AutoScroll = false;
+            Panel.VerticalScroll.Visible = true;
+            Panel.VerticalScroll.Enabled = true;
+            Panel.AutoScroll = true;
+            Console.WriteLine("Generated Panel x:{0}, y:{1}, width:{2}, height:{3}", X, Y, finalW, finalH);
             return Panel;
         }
     }

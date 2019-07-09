@@ -1,5 +1,6 @@
 ﻿using OurLibraryApp.Gui.App.Controls;
 using OurLibraryApp.Src.App.Access;
+using OurLibraryApp.Src.App.Data;
 using OurLibraryApp.Src.App.Utils;
 using System;
 using System.Windows.Forms;
@@ -9,6 +10,8 @@ namespace OurLibraryApp.Gui.App.Home
     partial class AppForm : BaseForm
     {
         private LoginForm FormLogin;
+        private VisitForm  FormVisit;
+        private BooksForm FormBooks;
         private Panel MainPanel = new Panel();
 
         public AppForm(AppUser User)
@@ -64,27 +67,31 @@ namespace OurLibraryApp.Gui.App.Home
         private void AddMenus()
         {
 
-            MainMenu Menus = new MainMenu();
-
             MenuItem LogoutMenu = new MenuItem("&LogOut");
             LogoutMenu.Click += new EventHandler(LogOutClick);
 
-            Menus.Name = "Master";
-            MenuItem MasterMenu = Menus.MenuItems.Add("&Master");
-            MenuItem BookRecordList = new MenuItem("&Book Record");
-            MenuItem StudentList = new MenuItem("&Student");
-            MenuItem Issue = new MenuItem("&Transactions");
-            MenuItem Visit = new MenuItem("&Visit");
-            MasterMenu.MenuItems.Add(Visit);
-            MasterMenu.MenuItems.Add(StudentList);
-            MasterMenu.MenuItems.Add(BookRecordList);
-            MasterMenu.MenuItems.Add(Issue);
-            MasterMenu.MenuItems.Add(BookRecordList);
+            MainMenu Menus = new MainMenu();
+            Menus.Name = "Master Data";
 
-            Menus.MenuItems.Add(new MenuItem("&Book Record"));
+            MenuItem MasterMenu = Menus.MenuItems.Add("&Master");
+            MasterMenu.MenuItems.Add(new MenuItem("&Book Record", new EventHandler(ShowBookRecord)));
+            MasterMenu.MenuItems.Add(new MenuItem("&Student"));
+            
+            MenuItem AdminMenu = Menus.MenuItems.Add("&Admin");
+            AdminMenu.MenuItems.Add(new MenuItem("&Transactions"));
+            AdminMenu.MenuItems.Add(new MenuItem("&Visit Recorder", new EventHandler(ShowVisit)));
+           
+                       
             Menus.MenuItems.Add(LogoutMenu);
 
             this.Menu = Menus;
+        }
+
+        private void ShowBookRecord(object sender, EventArgs e)
+        {
+            BookData Data = new BookData("Book");
+            FormBooks = new BooksForm(this, Data);
+
         }
 
         protected void LogOutClick(object Sender, EventArgs ev)
@@ -98,6 +105,11 @@ namespace OurLibraryApp.Gui.App.Home
                 Update();
             }
 
+        }
+
+        protected void ShowVisit(object Sender, EventArgs ev)
+        {
+            FormVisit = new VisitForm(this);
         }
     }
 }

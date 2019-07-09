@@ -12,6 +12,7 @@ namespace OurLibraryApp.Gui.App.Home
     class BaseForm : Form
     {
         public AppUser TheUser { get; set; }
+        protected AppForm RefForm { get; set; }
         public readonly int margin = 10;
         public BaseForm()
         {
@@ -24,6 +25,13 @@ namespace OurLibraryApp.Gui.App.Home
             this.CenterToScreen();
             Console.WriteLine("Show " + this.Name + " Form");
             base.OnCreateControl();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Console.WriteLine("Close " + this.Name + " Form");
+          
+            base.OnClosed(e);
         }
     }
 }
