@@ -65,7 +65,7 @@
     <Compile Include="Gui\App\Home\BooksForm -bak.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Gui\App\Home\BooksForm.cs">
+    <Compile Include="Gui\App\Home\EntityForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Gui\App\Home\IssueForm.cs">
@@ -87,8 +87,10 @@
     <Compile Include="Src\App\Access\Transaction.cs" />
     <Compile Include="Src\App\Access\UserClient.cs" />
     <Compile Include="Src\App\Annotation\AttributeConstant.cs" />
+    <Compile Include="Src\App\Annotation\ActionAttribute.cs" />
     <Compile Include="Src\App\Annotation\FieldAttribute.cs" />
     <Compile Include="Src\App\Data\BaseData.cs" />
+    <Compile Include="Src\App\Data\StudentData.cs" />
     <Compile Include="Src\App\Data\BookData.cs" />
     <Compile Include="Src\App\Data\BookForm.cs" />
     <Compile Include="Src\App\Models\author.cs" />

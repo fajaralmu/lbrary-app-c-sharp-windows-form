@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace OurLibraryApp.Gui.App.Home
 {
-    class BooksForm : BaseForm
+    class EntityForm : BaseForm
     {
         private BaseData EntityData;
         private Panel ListPanel;
@@ -25,7 +25,7 @@ namespace OurLibraryApp.Gui.App.Home
         private int Offset = 0;
         private int Limit = 10;
 
-        public BooksForm(AppForm RefForm, BaseData entityData)
+        public EntityForm(AppForm RefForm, BaseData entityData)
         {
             this.RefForm = RefForm;
             entityData.SetEntityForm(this);
@@ -39,8 +39,8 @@ namespace OurLibraryApp.Gui.App.Home
         {
             Width = 1300;
             Height = 700;
-            Name = EntityData.Name + "Form";
-            Text = @"" + EntityData.Name + "Form";
+            Name = EntityData.Name + "_Form";
+            Text = @"" + EntityData.Name + " Form";
             BtnFilterPagination.Click += (o, e) =>
             {
                 try
@@ -68,11 +68,12 @@ namespace OurLibraryApp.Gui.App.Home
 
         }
 
-        public void ShowDetail(object OBJ)
+        public void ShowDetail(Panel _DetailPanel)
         {
 
             Controls.Remove(DetailPanel);
-            DetailPanel = EntityData.ShowDetail(OBJ);
+            //  DetailPanel = EntityData.ShowDetail(OBJ);
+            DetailPanel = _DetailPanel;
             Controls.Add(DetailPanel);
         }
 
@@ -87,7 +88,7 @@ namespace OurLibraryApp.Gui.App.Home
             Controls.Remove(ListPanel);
             this.Offset = Offset;
             this.Limit = Limit == 0 ? this.Limit : Limit;
-            ListPanel = EntityData.UpdateListPanel(Offset, Limit);
+            ListPanel = EntityData.UpdateListPanel(this.Offset, this.Limit);
             Controls.Add(ListPanel);
             GenerateNavButton();
         }

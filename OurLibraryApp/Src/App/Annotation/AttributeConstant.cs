@@ -18,5 +18,9 @@ namespace OurLibrary.Annotation
         public const string TYPE_DATE = "date";
         public const string TYPE_NUMBER = "number";
         public const string TYPE_FILE_IMAGE = "file_image";
+        public const string TYPE_COUNT = "count";
+
+        //action atr
+        public const string TYPE_DETAIL_CLICK = "detail_click";
     }
 }

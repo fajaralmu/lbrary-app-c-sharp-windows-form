@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
+using OurLibrary.Annotation;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -16,7 +18,7 @@ namespace OurLibraryApp.Src.App.Utils
             {
                 if (Map.ContainsKey(K))
                 {
-                    JValue Value =(JValue) Map[K];
+                    JValue Value = (JValue)Map[K];
                     object Val = Map[K];
                     switch (Value.Type.ToString())
                     {
@@ -30,8 +32,9 @@ namespace OurLibraryApp.Src.App.Utils
                             Val = null;
                             break;
                     }
-                   
-                    if (HasProperty(K, Object)){
+
+                    if (HasProperty(K, Object))
+                    {
                         Object.GetType().GetProperty(K).SetValue(Object, Val);
                     }
                 }
@@ -49,6 +52,31 @@ namespace OurLibraryApp.Src.App.Utils
                 }
             }
             return false;
+        }
+
+        public static int CustomAttributesCount(Type O)
+        {
+            int count = 0;
+            foreach (PropertyInfo Prop in O.GetProperties())
+            {
+                object[] Attributes = Prop.GetCustomAttributes(typeof(FieldAttribute), true);
+                if (Attributes.Length > 0)
+                {
+                    FieldAttribute Attribute = (FieldAttribute)Attributes[0];
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public static List<object> ListToListObj(ICollection O)
+        {
+            List<object> List = new List<object>();
+            foreach (var o in O)
+            {
+                List.Add(o);
+            }
+            return List;
         }
     }
 }

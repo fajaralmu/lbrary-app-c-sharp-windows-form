@@ -10,8 +10,12 @@
 namespace OurLibrary.Models
 {
     using Annotation;
+    using OurLibraryApp.Src.App.Utils;
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
+    using System.Windows.Forms;
 
     [Serializable]
     public partial class book
@@ -28,20 +32,21 @@ namespace OurLibrary.Models
         [FieldAttribute(Required = true, FieldType = AttributeConstant.TYPE_TEXTBOX)]
 
         public string title { get; set; }
-        [FieldAttribute(Required = true, FieldType = AttributeConstant.TYPE_DROPDOWN, FieldName = "Book Author", ClassReference = "author", ClassAttributeConverter = "name")]
-        public string author_id { get; set; }
-        [FieldAttribute(Required = true, FieldType = AttributeConstant.TYPE_DROPDOWN, FieldName = "Book Category", ClassReference = "category", ClassAttributeConverter = "category_name")]
-        public string category_id { get; set; }
-        [FieldAttribute(Required = true, FieldType = AttributeConstant.TYPE_DROPDOWN, FieldName = "Book Publisher", ClassReference = "publisher", ClassAttributeConverter = "name")]
-        public string publisher_id { get; set; }
-        [FieldAttribute(FieldType = AttributeConstant.TYPE_TEXTBOX)]
 
+        public string author_id { get; set; }
+        public string category_id { get; set; }
+        public string publisher_id { get; set; }
+
+        [FieldAttribute(FieldType = AttributeConstant.TYPE_TEXTBOX)]
         public string isbn { get; set; }
-        [FieldAttribute(FieldType = AttributeConstant.TYPE_TEXTAREA)]
+
+        //   [FieldAttribute(FieldType = AttributeConstant.TYPE_TEXTAREA)]
         public string review { get; set; }
+
         [FieldAttribute(FieldType = AttributeConstant.TYPE_NUMBER)]
         public Nullable<int> page { get; set; }
-        [FieldAttribute(FieldType = AttributeConstant.TYPE_FILE_IMAGE, FieldName = "Image")]
+
+        //  [FieldAttribute(FieldType = AttributeConstant.TYPE_FILE_IMAGE, FieldName = "Image")]
         public string img { get; set; }
 
         public override string ToString()
@@ -49,10 +54,46 @@ namespace OurLibrary.Models
             return string.Format("ID: {0}, TITLE:{1}, AUTHOR:{2}, CAT:{3}, PUBLISHER:{4} ", id, title, author.name, category.category_name, publisher.name);
         }
 
+        [FieldAttribute(Required = true, FieldType = AttributeConstant.TYPE_DROPDOWN, FieldName = "Book Author", ClassReference = "author", ClassAttributeConverter = "name")]
         public virtual author author { get; set; }
+
+        [FieldAttribute(Required = true, FieldType = AttributeConstant.TYPE_DROPDOWN, FieldName = "Book Category", ClassReference = "category", ClassAttributeConverter = "category_name")]
         public virtual category category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+        [FieldAttribute(FieldType = AttributeConstant.TYPE_COUNT)]
         public virtual ICollection<book_record> book_record { get; set; }
+
+        [FieldAttribute(Required = true, FieldType = AttributeConstant.TYPE_DROPDOWN, FieldName = "Book Publisher", ClassReference = "publisher", ClassAttributeConverter = "name")]
+
         public virtual publisher publisher { get; set; }
+
+        [ActionAttribute(FieldType = AttributeConstant.TYPE_DETAIL_CLICK)]
+        public Panel DetailPanel()
+        {
+            Panel DetailPanel = new Panel();
+            Control[] DetailsCol = new Control[5 * (book_record.Count + 1)];
+            //update
+            string[] ColumnLabels = { "No", "RecId", "BookCode", "BookId", "Available" };
+            for (int i = 0; i < ColumnLabels.Length; i++)
+            {
+                DetailsCol[i] = new Label() { Text = ColumnLabels[i] };
+            }
+            int ControlIndex = 5;
+            for (int i = 0; i < book_record.Count; i++)
+            {
+                book_record BR = book_record.ElementAt(i);
+                DetailsCol[ControlIndex++] = new Label() { Text = (i + 1).ToString() };
+                DetailsCol[ControlIndex++] = new Label() { Text = BR.id };
+                DetailsCol[ControlIndex++] = new Label() { Text = BR.book_code };
+                DetailsCol[ControlIndex++] = new Label() { Text = BR.book_id };
+                DetailsCol[ControlIndex++] = new Label() { Text = BR.available == 1 ? "yes" : "-" };
+
+            }
+            //
+            DetailPanel = ControlUtil.PopulatePanel(5, DetailsCol, 5, 70, 20, Color.Orange, 780, 100, 400, 500);
+
+            return DetailPanel;
+        }
     }
 }

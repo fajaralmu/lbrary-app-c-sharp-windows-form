@@ -11,7 +11,7 @@ namespace OurLibraryApp.Gui.App.Home
     {
         private LoginForm FormLogin;
         private VisitForm  FormVisit;
-        private BooksForm FormBooks;
+        private EntityForm FormBooks;
         private Panel MainPanel = new Panel();
 
         public AppForm(AppUser User)
@@ -75,7 +75,7 @@ namespace OurLibraryApp.Gui.App.Home
 
             MenuItem MasterMenu = Menus.MenuItems.Add("&Master");
             MasterMenu.MenuItems.Add(new MenuItem("&Book Record", new EventHandler(ShowBookRecord)));
-            MasterMenu.MenuItems.Add(new MenuItem("&Student"));
+            MasterMenu.MenuItems.Add(new MenuItem("&Student", new EventHandler(ShowStudentRecord)));
             
             MenuItem AdminMenu = Menus.MenuItems.Add("&Admin");
             AdminMenu.MenuItems.Add(new MenuItem("&Transactions"));
@@ -90,7 +90,14 @@ namespace OurLibraryApp.Gui.App.Home
         private void ShowBookRecord(object sender, EventArgs e)
         {
             BookData Data = new BookData("Book");
-            FormBooks = new BooksForm(this, Data);
+            FormBooks = new EntityForm(this, Data);
+
+        }
+
+        private void ShowStudentRecord(object sender, EventArgs e)
+        {
+            StudentData Data = new StudentData("Student");
+            FormBooks = new EntityForm(this, Data);
 
         }
 

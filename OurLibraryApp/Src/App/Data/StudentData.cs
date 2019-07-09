@@ -12,26 +12,26 @@ using System.Windows.Forms;
 
 namespace OurLibraryApp.Src.App.Data
 {
-    class BookData : BaseData {
+    class StudentData : BaseData {
 
-        private List<book> Books = new List<book>();
+        private List<student> Students = new List<student>();
 
-        public BookData()
+        public StudentData()
         {
-            Entity = typeof(book);
+            Entity = typeof(student);
         }
-        public BookData(string Name)
+        public StudentData(string Name)
         {
-            Entity = typeof(book);
+            Entity = typeof(student);
             this.Name = Name;
         }
 
         public override Panel UpdateListPanel(int Offset, int Limit)
         {
-            Dictionary<string, object> BookListInfo = Transaction.BookList(Offset, Limit);
-            Books = (List<book>)BookListInfo["data"];
-            EntityList = ObjectUtil.ListToListObj(Books);
-            EntityTotalCount = (int)BookListInfo["totalCount"];
+            Dictionary<string, object> studentListInfo = Transaction.StudentList(Offset, Limit);
+            Students = (List<student>)studentListInfo["data"];
+            EntityList = ObjectUtil.ListToListObj(Students);
+            EntityTotalCount = (int)studentListInfo["totalCount"];
             EntityListPanel = base.GeneratePanel(Offset, Limit);
             return EntityListPanel;
         }

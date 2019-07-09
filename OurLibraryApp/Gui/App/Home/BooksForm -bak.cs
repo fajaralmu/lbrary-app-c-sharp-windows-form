@@ -38,7 +38,7 @@ namespace OurLibraryApp.Gui.App.Home
         {
             Width = 1300;
             Height = 700;
-            Name = "BooksForm";
+            Name = "EntityForm";
             Text = @"Books Form";
             BtnFilterPagination.Click += (o, e)=> {
                 try
