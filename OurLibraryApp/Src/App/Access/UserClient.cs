@@ -59,5 +59,30 @@ namespace OurLibraryApp.Src.App.Access
             }
             return null;
         }
+
+
+        public static student StudentById(string Id)
+        {
+            Dictionary<string, object> Params = new Dictionary<string, object>
+            {
+                {"Action", "studentById" },
+                 {"Id", Id }
+            };
+            Dictionary<string, object> RespParams = Request.PostReq("http://localhost:64945/Web/API/Info", Params);
+            if (RespParams["result"] != null && RespParams["result"].ToString() == "0")
+            {
+                Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespParams["data"].ToString());
+                Dictionary<string, object> StdMap = StringUtil.JSONStringToMap(DataMap["student"].ToString());
+                
+                return new student()
+                {
+                    id = Id,
+                    name = StdMap["name"].ToString(),
+                    bod = StdMap["bod"].ToString(),
+                    class_id = StdMap["class_id"].ToString().Trim()
+                };
+            }
+            return null;
+        }
     }
 }

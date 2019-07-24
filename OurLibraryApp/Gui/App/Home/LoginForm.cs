@@ -39,7 +39,7 @@ namespace OurLibraryApp.Gui.App.Home
 
             Control[] LoginControls =
             {
-                new TitleLabel() {Text="LOGIN FORM"},null,
+                new TitleLabel() {Text="Please Login"},new BlankControl() {Reserved=ReservedFor.BEFORE_HOR },
                 new Label() {Text="Username" }, TxtUsername,
                 new Label() {Text="Password" }, TxtPwd,
                 BtnLogin
@@ -54,18 +54,27 @@ namespace OurLibraryApp.Gui.App.Home
         {
             string Username = TxtUsername.Text;
             string Password = TxtPwd.Text;
-            user LoggedUser = userClient.UserLogin(Username, Password);
-            if (null != LoggedUser)
+            Loading LoadingMsg = new Loading("LOADING");
+            
+            ISyncInvoke.InvokeAsync(this, (f) =>
             {
-                MessageBox.Show("Login Berhasil!","Info");
-                RefForm.TheUser = new AppUser() { User = LoggedUser };
-                RefForm.Update();
-                this.Dispose();
-            }
-            else
-            {
-                MessageBox.Show("Login Gagal!","Info");
-            }
+               
+                user LoggedUser = userClient.UserLogin(Username, Password);
+                if (null != LoggedUser)
+                {
+                    MessageBox.Show("Login Berhasil!", "Info");
+                    RefForm.TheUser = new AppUser() { User = LoggedUser };
+                    RefForm.Update();
+                    LoadingMsg.Dispose();
+                    this.Dispose();
+                }
+                else
+                {
+                    MessageBox.Show("Login Gagal!", "Info");
+                    LoadingMsg.Dispose();
+                }
+            });
+
         }
 
         protected override void OnClosed(EventArgs e)

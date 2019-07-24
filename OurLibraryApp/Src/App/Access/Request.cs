@@ -33,25 +33,30 @@ namespace OurLibraryApp.Src.App.Access
             postStream.Write(postBytes, 0, postBytes.Length);
             postStream.Flush();
             postStream.Close();
-                        
-            WebResponse response = request.GetResponse();
-            string responseFromServer = "";
-            using (postStream = response.GetResponseStream())
+            try
             {
-                // Open the stream using a StreamReader for easy access.  
-                StreamReader reader = new StreamReader(postStream);
-                // Read the content.  
-                 responseFromServer = reader.ReadToEnd();
-                // Display the content.  
-                Console.WriteLine(responseFromServer);
-            }
+                WebResponse response = request.GetResponse();
+                string responseFromServer = "";
+                using (postStream = response.GetResponseStream())
+                {
+                    // Open the stream using a StreamReader for easy access.  
+                    StreamReader reader = new StreamReader(postStream);
+                    // Read the content.  
+                    responseFromServer = reader.ReadToEnd();
+                    // Display the content.  
+                    Console.WriteLine(responseFromServer);
+                }
 
-            // Close the response.  
-            response.Close();
-            Console.WriteLine("response " + ((HttpWebResponse)response).StatusDescription);
-            
-          
-            return StringUtil.JSONStringToMap(responseFromServer);
+                // Close the response.  
+                response.Close();
+                Console.WriteLine("response " + ((HttpWebResponse)response).StatusDescription);
+
+
+                return StringUtil.JSONStringToMap(responseFromServer);
+            }catch(WebException webEx)
+            {
+                return null;
+            }
         }
     }
 }

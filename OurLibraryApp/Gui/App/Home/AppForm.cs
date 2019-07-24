@@ -11,7 +11,7 @@ namespace OurLibraryApp.Gui.App.Home
     {
         private LoginForm FormLogin;
         private VisitForm  FormVisit;
-        private EntityForm FormBooks;
+        private EntityForm EntityForm;
         private Panel MainPanel = new Panel();
 
         public AppForm(AppUser User)
@@ -78,26 +78,39 @@ namespace OurLibraryApp.Gui.App.Home
             MasterMenu.MenuItems.Add(new MenuItem("&Student", new EventHandler(ShowStudentRecord)));
             
             MenuItem AdminMenu = Menus.MenuItems.Add("&Admin");
-            AdminMenu.MenuItems.Add(new MenuItem("&Transactions"));
+            AdminMenu.MenuItems.Add(new MenuItem("&Transactions", new EventHandler(ShowTransactionRecord)));
             AdminMenu.MenuItems.Add(new MenuItem("&Visit Recorder", new EventHandler(ShowVisit)));
-           
-                       
+            AdminMenu.MenuItems.Add(new MenuItem("&Visit History", new EventHandler(ShowVisitRecord)));
+
+
             Menus.MenuItems.Add(LogoutMenu);
 
             this.Menu = Menus;
         }
 
+        private void ShowVisitRecord(object sender, EventArgs e)
+        {
+            VisitData Data = new VisitData("Visit History");
+            EntityForm = new EntityForm(this, Data);
+        }
+
+        private void ShowTransactionRecord(object sender, EventArgs e)
+        {
+            TransactionData Data = new TransactionData("Transaction");
+            EntityForm = new EntityForm(this, Data);
+        }
+
         private void ShowBookRecord(object sender, EventArgs e)
         {
             BookData Data = new BookData("Book");
-            FormBooks = new EntityForm(this, Data);
+            EntityForm = new EntityForm(this, Data);
 
         }
 
         private void ShowStudentRecord(object sender, EventArgs e)
         {
             StudentData Data = new StudentData("Student");
-            FormBooks = new EntityForm(this, Data);
+            EntityForm = new EntityForm(this, Data);
 
         }
 

@@ -12,23 +12,25 @@ using System.Windows.Forms;
 
 namespace OurLibraryApp.Src.App.Data
 {
-    class StudentData : BaseData {
+    class StudentData : BaseData
+    {
 
         private List<student> Students = new List<student>();
 
-        public StudentData()
+        public StudentData() : base("studentList")
         {
+            ListObjServiceName = "studentList";
             Entity = typeof(student);
         }
-        public StudentData(string Name)
+        public StudentData(string Name) : base("studentList")
         {
             Entity = typeof(student);
             this.Name = Name;
         }
 
-        public override Panel UpdateListPanel(int Offset, int Limit)
+        public override Panel UpdateListPanel(int Offset, int Limit, Dictionary<string, object> ObjMapInfo)
         {
-            Dictionary<string, object> studentListInfo = Transaction.StudentList(Offset, Limit);
+            Dictionary<string, object> studentListInfo = ObjMapInfo;
             Students = (List<student>)studentListInfo["data"];
             EntityList = ObjectUtil.ListToListObj(Students);
             EntityTotalCount = (int)studentListInfo["totalCount"];
@@ -36,6 +38,34 @@ namespace OurLibraryApp.Src.App.Data
             return EntityListPanel;
         }
 
-       
+        public override Dictionary<string, object> ObjectList(int Offset, int Limit, List<Dictionary<string, object>> ObjectList)
+        {
+            int TotalCount = 0;
+            List<Dictionary<string, object>> StudentListMap = ObjectList;
+            List<student> Students = new List<student>();
+            if (StudentListMap.Count == 0)
+            {
+                goto end;
+            }
+
+            foreach (Dictionary<string, object> StudentMap in StudentListMap)
+            {
+                if (StudentMap.Keys.Count == 1 && StudentMap.Keys.ElementAt(0).Equals("count"))
+                {
+                    TotalCount = (int)StudentMap["count"];
+                    break;
+                }
+                student Student = (student)ObjectUtil.FillObjectWithMap(new student(), StudentMap);
+                Students.Add(Student);
+            }
+            
+            end:
+            return new Dictionary<string, object>() {
+                {"totalCount",TotalCount },
+                {"data",Students }
+            };
+        }
+
+
     }
 }

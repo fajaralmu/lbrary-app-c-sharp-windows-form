@@ -91,7 +91,7 @@ namespace OurLibrary.Models
 
             }
             //
-            DetailPanel = ControlUtil.PopulatePanel(5, DetailsCol, 5, 70, 20, Color.Orange, 780, 100, 400, 500);
+            DetailPanel = ControlUtil.PopulatePanel(5, DetailsCol, 5, 70, 20, Color.Orange, 5, 5, 400, 500);
 
             return DetailPanel;
         }
