@@ -4,6 +4,7 @@ using OurLibraryApp.Src.App.Access;
 using OurLibraryApp.Src.App.Utils;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,22 +31,28 @@ namespace OurLibraryApp.Gui.App.Home
 
         private void Init()
         {
-            Width = 600;
-            Height = 400;
+            Width = 450;
+            Height = 300;
             Text = @"Login User";
             Name = "LoginForm";
             BtnLogin.Click += new EventHandler(BtnLogn_Click);
-            BtnLogin.Text = "LOGIN";
+            BtnLogin.Text = "Login";
+            float fontSize = ControlUtil.NewFontSize(CreateGraphics(), BtnLogin.Size, BtnLogin.Font, BtnLogin.Text);
+            Font f = new Font("Arial", fontSize, FontStyle.Bold);
+            BtnLogin.Font = f;
+            BtnLogin.BackColor = Color.Gray;
+
+            BackColor = Color.White;
 
             Control[] LoginControls =
             {
-                new TitleLabel() {Text="Please Login"},new BlankControl() {Reserved=ReservedFor.BEFORE_HOR },
+                new TitleLabel() {Text="Please Login", TextAlign=ContentAlignment.MiddleCenter},new BlankControl() {Reserved=ReservedFor.BEFORE_HOR },
                 new Label() {Text="Username" }, TxtUsername,
                 new Label() {Text="Password" }, TxtPwd,
                 BtnLogin
             };
-            Panel LoginPanel = ControlUtil.PopulatePanel(2, LoginControls, 5, 200, 50, System.Drawing.Color.White);
-            LoginPanel.SetBounds(50, 50, LoginPanel.Width, LoginPanel.Height);
+            Panel LoginPanel = ControlUtil.GeneratePanel(2, LoginControls, 5, 200, 50, System.Drawing.Color.White);
+            LoginPanel.SetBounds(10, 10, LoginPanel.Width, LoginPanel.Height);
             Controls.Add(LoginPanel);
             TxtUsername.Focus();
         }
@@ -55,10 +62,10 @@ namespace OurLibraryApp.Gui.App.Home
             string Username = TxtUsername.Text;
             string Password = TxtPwd.Text;
             Loading LoadingMsg = new Loading("LOADING");
-            
+
             ISyncInvoke.InvokeAsync(this, (f) =>
             {
-               
+
                 user LoggedUser = userClient.UserLogin(Username, Password);
                 if (null != LoggedUser)
                 {

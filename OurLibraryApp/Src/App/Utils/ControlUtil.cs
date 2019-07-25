@@ -12,7 +12,7 @@ namespace OurLibraryApp.Src.App.Utils
     class ControlUtil
 
     {
-        public static Panel PopulatePanel(int Col, Control[] Controls, int Margin, int W, int H, Color c, int panelX = 0, int panelY = 0, int panelW = 0, int panelH = 0)
+        public static Panel GeneratePanel(int Col, Control[] Controls, int Margin, int W, int H, Color c, int panelX = 0, int panelY = 0, int panelW = 0, int panelH = 0)
         {
             return PopulatePanel(true, Col, Controls, Margin, W, H, c, panelX, panelY, panelW, panelH);
         }
@@ -84,8 +84,18 @@ namespace OurLibraryApp.Src.App.Utils
                 Panel.VerticalScroll.Enabled = true;
                 Panel.AutoScroll = true;
             }
-            Console.WriteLine("Generated Panel x:{0}, y:{1}, width:{2}, height:{3}", X, Y, finalW, finalH);
+            Gui.App.Controls.CustomConsole.WriteLine("Generated Panel x:{0}, y:{1}, width:{2}, height:{3}", X, Y, finalW, finalH);
             return Panel;
+        }
+
+
+        public static float NewFontSize(Graphics graphics, Size size, Font font, string str)
+        {
+            SizeF stringSize = graphics.MeasureString(str, font);
+            float wRatio = size.Width / stringSize.Width;
+            float hRatio = size.Height / stringSize.Height;
+            float ratio = Math.Min(hRatio, wRatio);
+            return font.Size * ratio;
         }
     }
 }

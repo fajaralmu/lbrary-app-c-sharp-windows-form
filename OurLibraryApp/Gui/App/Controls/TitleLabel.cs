@@ -13,7 +13,7 @@ namespace OurLibraryApp.Gui.App.Controls
         public TitleLabel(int em_ten_hi)//10 is big
         {
             fontSize = em_ten_hi;
-            this.Font = new System.Drawing.Font("Arial", em_ten_hi);
+            this.Font = new System.Drawing.Font("Arial", em_ten_hi, System.Drawing.FontStyle.Bold);
             Init();
         }
 
@@ -24,7 +24,7 @@ namespace OurLibraryApp.Gui.App.Controls
 
         public TitleLabel()//10 is big
         {
-            this.Font = new System.Drawing.Font("Arial", 20);
+            this.Font = new System.Drawing.Font("Arial", 20, System.Drawing.FontStyle.Bold);
             Init();
         }
 

@@ -17,13 +17,15 @@ namespace OurLibraryApp.Src.App.Data
 
         private List<visit> visits = new List<visit>();
 
-        public VisitData() : base("visitList")
+        public VisitData(AppUser AppUser) : base("visitList")
         {
+            this.AppUser = AppUser;
             ListObjServiceName = "visitList";
             Entity = typeof(visit);
         }
-        public VisitData(string Name) : base("visitList")
+        public VisitData(string Name, AppUser AppUser) : base("visitList")
         {
+            this.AppUser = AppUser;
             Entity = typeof(visit);
             this.Name = Name;
         }

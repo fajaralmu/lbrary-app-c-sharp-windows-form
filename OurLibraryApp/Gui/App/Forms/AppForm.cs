@@ -45,11 +45,11 @@ namespace OurLibraryApp.Gui.App.Home
             this.Menu = null;
             if (null != TheUser && TheUser.User != null)
             {
-                Console.WriteLine("User OK");
+                CustomConsole.WriteLine("User OK");
                 TitleLabel WelcomeLabel = new TitleLabel(20) { Text = "Welcome, " + TheUser.User.name };
                 TitleLabel AppLabel = new TitleLabel(30) { Text = "Our Library PC APP" };
                 Control[] ControlParam = { AppLabel, WelcomeLabel };
-                Panel HeaderPanel = ControlUtil.PopulatePanel(1, ControlParam, 5, 400, 50, System.Drawing.Color.Blue);
+                Panel HeaderPanel = ControlUtil.GeneratePanel(1, ControlParam, 5, 400, 50, System.Drawing.Color.Blue);
                 MainPanel.Controls.Add(HeaderPanel);
                 AddMenus();
                 this.Enabled = true;
@@ -59,7 +59,7 @@ namespace OurLibraryApp.Gui.App.Home
                 FormLogin = new LoginForm(this);
                 FormLogin.Show();
                 FormLogin.Focus();
-                Console.WriteLine("User Not OK");
+                CustomConsole.WriteLine("User Not OK");
                 this.Enabled = false;
             }
         }
@@ -90,26 +90,26 @@ namespace OurLibraryApp.Gui.App.Home
 
         private void ShowVisitRecord(object sender, EventArgs e)
         {
-            VisitData Data = new VisitData("Visit History");
+            VisitData Data = new VisitData("Visit History", TheUser);
             EntityForm = new EntityForm(this, Data);
         }
 
         private void ShowTransactionRecord(object sender, EventArgs e)
         {
-            TransactionData Data = new TransactionData("Transaction");
+            TransactionData Data = new TransactionData("Transaction", TheUser);
             EntityForm = new EntityForm(this, Data);
         }
 
         private void ShowBookRecord(object sender, EventArgs e)
         {
-            BookData Data = new BookData("Book");
+            BookData Data = new BookData("Book", TheUser);
             EntityForm = new EntityForm(this, Data);
 
         }
 
         private void ShowStudentRecord(object sender, EventArgs e)
         {
-            StudentData Data = new StudentData("Student");
+            StudentData Data = new StudentData("Student", TheUser);
             EntityForm = new EntityForm(this, Data);
 
         }

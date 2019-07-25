@@ -16,10 +16,13 @@ namespace OurLibraryApp.Gui.App.Home
 {
     class EntityForm : BaseForm
     {
+        private PictureBox LoadingImg = new PictureBox() { Width = 300, Height = 300, SizeMode = PictureBoxSizeMode.StretchImage, ImageLocation = "https://i.giphy.com/3oEjI6SIIHBdRxXI40.gif" };
         private BaseData EntityData;
         private Panel ListPanel;
         private Panel DetailPanel = new Panel();
         private Panel NavPanel;
+        private Panel ButtonsPanel = new Panel();
+
         private Label InfoFilter = new Label();
         private TextBox InputOffset = new TextBox() { Text = "0" };
         private TextBox InputLimit = new TextBox() { Text = "10" };
@@ -40,10 +43,14 @@ namespace OurLibraryApp.Gui.App.Home
 
         private void Init()
         {
+            //form
             Width = 1300;
             Height = 700;
+            Font = new System.Drawing.Font("Arial", 10);
             Name = EntityData.Name + "_Form";
             Text = @"" + EntityData.Name + " Form";
+
+            //components
             BtnFilterPagination.Click += (o, e) =>
             {
                 try
@@ -55,13 +62,13 @@ namespace OurLibraryApp.Gui.App.Home
                 catch (Exception ex)
                 {
                     MessageBox.Show("Input tidak valid", "Error");
-                    Console.WriteLine(ex.Message);
+                    CustomConsole.WriteLine(ex.Message);
                     return;
                 }
             };
 
             Button ClearBtn = new Button() { Text = "Clear" };
-            ClearBtn.Click += new EventHandler((o,e) =>
+            ClearBtn.Click += new EventHandler((o, e) =>
             {
                 EntityData.FilterParmas.Clear();
                 Navigate(0, 0);
@@ -77,31 +84,39 @@ namespace OurLibraryApp.Gui.App.Home
                 new BlankControl() {Reserved = ReservedFor.BEFORE_HOR },
                 ClearBtn
             };
-            Panel PagingPanel = ControlUtil.PopulatePanel(6, FilterControls, 0, 110, 30, Color.Azure);
+            Panel PagingPanel = ControlUtil.GeneratePanel(6, FilterControls, 0, 110, 30, Color.Azure);
             Controls.Add(PagingPanel);
+
+            ButtonsPanel = ControlUtil.GeneratePanel(3, new Control[]
+            {
+                new TitleLabel(13) {Text="Buttons Panel" }, null
+            }, 5, 130, 20,Color.Azure, 850, 10);
+            Controls.Add(ButtonsPanel);
+
             DetailPanel.SetBounds(850, 130, Constant.DETAIL_PANEL_HEIGHT, Constant.DETAIL_PANEL_WIDTH);
             DetailPanel.AutoScroll = false;
             DetailPanel.VerticalScroll.Visible = true;
             DetailPanel.VerticalScroll.Enabled = true;
             DetailPanel.AutoScroll = true;
             Controls.Add(DetailPanel);
+
             GenerateTable();
 
         }
 
-        public void ShowDetail(Panel _DetailPanel)
+        public void ShowDetail(Panel _DetailPanel, Loading L)
         {
-
-        //    Controls.Remove(DetailPanel);
-            //  DetailPanel = EntityData.ShowDetail(OBJ);
-            DetailPanel.Controls.Clear();
-            DetailPanel.Controls.Add( _DetailPanel);
-            
+            ISyncInvoke.InvokeAsync(this, (f) =>
+            {
+                DetailPanel.Controls.Clear();
+                DetailPanel.Controls.Add(_DetailPanel);
+                L.Dispose();
+            });
         }
 
         public void Navigate(int Offset, int Limit)
         {
-            Console.WriteLine("Navigating {0}, {1}", Offset, Limit);
+            CustomConsole.WriteLine("Navigating {0}, {1}", Offset, Limit);
             GenerateTable(Offset, Limit);
         }
 
@@ -127,10 +142,10 @@ namespace OurLibraryApp.Gui.App.Home
             this.Offset = Offset;
             this.Limit = Limit == 0 ? this.Limit : Limit;
             Loading LoadingMsg = new Loading("LOADING");
-            
+
             ISyncInvoke.InvokeAsync(this, (f) =>
             {
-                 UpdateData();
+                UpdateData();
 
                 if (this.ListPanel == null)
                 {
@@ -172,7 +187,7 @@ namespace OurLibraryApp.Gui.App.Home
                 Button NavBtn = new Button() { Text = (i + 1).ToString() };
                 if (i == Offset)
                 {
-                    NavBtn.Text = "(" + NavBtn.Text+")";
+                    NavBtn.Text = "(" + NavBtn.Text + ")";
                 }
                 int page = i;
                 NavBtn.Click += (o, e) =>
@@ -181,7 +196,7 @@ namespace OurLibraryApp.Gui.App.Home
                 };
                 NavButtons[i] = NavBtn;
             }
-            NavPanel = ControlUtil.PopulatePanel(17, NavButtons, 5, 40, 30, Color.AliceBlue, 5, 65, 760, 60);
+            NavPanel = ControlUtil.GeneratePanel(17, NavButtons, 5, 40, 30, Color.AliceBlue, 5, 65, 760, 60);
             Controls.Add(NavPanel);
             InfoOffsetLimit.Text = "Page: " + Offset + ", Rec per Page: " + Limit;
         }

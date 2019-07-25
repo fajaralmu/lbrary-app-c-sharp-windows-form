@@ -10,6 +10,7 @@ namespace OurLibraryApp.Src.App.Utils
 {
     class StringUtil
     {
+       
         public static string DictionatyToQueryString(Dictionary<string, object> Dict)
         {
             string QueryString = "";
@@ -36,7 +37,7 @@ namespace OurLibraryApp.Src.App.Utils
                 for (int i = 0; i < ObjList.Count; i++)
                 {
                     JToken Element = ObjList.ElementAt(i);
-                    // Console.Write("element to String " + Element.ToString());
+                    // Gui.App.Controls.CustomConsole.Write("element to String " + Element.ToString());
                     Dictionary<string, object> ElementMap = JSONStringToMap(Element.ToString());
                     Array.Add(ElementMap);
                 }
@@ -46,14 +47,14 @@ namespace OurLibraryApp.Src.App.Utils
             else
             {
                 JObject JSONObj = (JObject)JObject;
-                Console.WriteLine("==========BEGIN::JSONObject to MAP=======");
+                Gui.App.Controls.CustomConsole.WriteLine("==========BEGIN::JSONObject to MAP=======");
                 Dictionary<string, object> Dict = new Dictionary<string, object>();
                 foreach (JProperty key in JSONObj.Properties())
                 {
-                    Console.WriteLine(key.Name.ToString() + "-> " + key.Value + " | " + key.Value.GetType());
+                    Gui.App.Controls.CustomConsole.WriteLine(key.Name.ToString() + "-> " + key.Value + " | " + key.Value.GetType());
                     Dict.Add(key.Name, key.Value);
                 }
-                Console.WriteLine("==========END::JSONObject to MAP=======");
+                Gui.App.Controls.CustomConsole.WriteLine("==========END::JSONObject to MAP=======");
                 return Dict;
             }
         }

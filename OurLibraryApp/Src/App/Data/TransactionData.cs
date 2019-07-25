@@ -17,13 +17,15 @@ namespace OurLibraryApp.Src.App.Data
 
         private List<issue> Issues = new List<issue>();
 
-        public TransactionData() : base("issuesList")
+        public TransactionData(AppUser AppUser) : base("issuesList")
         {
+            this.AppUser= AppUser;
             ListObjServiceName = "issuesList";
             Entity = typeof(issue);
         }
-        public TransactionData(string Name) : base("issuesList")
+        public TransactionData(string Name, AppUser AppUser) : base("issuesList")
         {
+            this.AppUser = AppUser;
             Entity = typeof(issue);
             this.Name = Name;
         }
@@ -58,6 +60,7 @@ namespace OurLibraryApp.Src.App.Data
                 }
                
                 issue issue = (issue)ObjectUtil.FillObjectWithMap(new issue(), issueMap);
+                issue.appUser = AppUser;
                 issues.Add(issue);
             }
 

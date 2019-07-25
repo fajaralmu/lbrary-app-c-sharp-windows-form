@@ -18,10 +18,10 @@ namespace OurLibraryApp.Src.App.Access
         {
             string postData = StringUtil.DictionatyToQueryString(Param);
             ASCIIEncoding ascii = new ASCIIEncoding();
-            Console.WriteLine("Post Data: " + postData);
+            Gui.App.Controls.CustomConsole.WriteLine("Post Data: " + postData);
             byte[] postBytes = Encoding.UTF8.GetBytes(postData);
 
-            Console.WriteLine("Begin post " + Url);
+            Gui.App.Controls.CustomConsole.WriteLine("Begin post " + Url);
 
             WebRequest request = WebRequest.Create(Url);
             request.Method = "POST";
@@ -44,12 +44,12 @@ namespace OurLibraryApp.Src.App.Access
                     // Read the content.  
                     responseFromServer = reader.ReadToEnd();
                     // Display the content.  
-                    Console.WriteLine(responseFromServer);
+                    Gui.App.Controls.CustomConsole.WriteLine(responseFromServer);
                 }
 
                 // Close the response.  
                 response.Close();
-                Console.WriteLine("response " + ((HttpWebResponse)response).StatusDescription);
+                Gui.App.Controls.CustomConsole.WriteLine("response " + ((HttpWebResponse)response).StatusDescription);
 
 
                 return StringUtil.JSONStringToMap(responseFromServer);

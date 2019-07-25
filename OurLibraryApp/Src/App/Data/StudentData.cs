@@ -17,13 +17,15 @@ namespace OurLibraryApp.Src.App.Data
 
         private List<student> Students = new List<student>();
 
-        public StudentData() : base("studentList")
+        public StudentData(AppUser AppUser) : base("studentList")
         {
+            this.AppUser = AppUser;
             ListObjServiceName = "studentList";
             Entity = typeof(student);
         }
-        public StudentData(string Name) : base("studentList")
+        public StudentData(string Name, AppUser AppUser) : base("studentList")
         {
+            this.AppUser = AppUser;
             Entity = typeof(student);
             this.Name = Name;
         }
@@ -56,9 +58,10 @@ namespace OurLibraryApp.Src.App.Data
                     break;
                 }
                 student Student = (student)ObjectUtil.FillObjectWithMap(new student(), StudentMap);
+                Student.AppUser = AppUser;
                 Students.Add(Student);
             }
-            
+
             end:
             return new Dictionary<string, object>() {
                 {"totalCount",TotalCount },

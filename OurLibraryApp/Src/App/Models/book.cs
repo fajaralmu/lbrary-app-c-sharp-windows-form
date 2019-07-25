@@ -10,6 +10,7 @@
 namespace OurLibrary.Models
 {
     using Annotation;
+    using OurLibraryApp.Gui.App.Controls;
     using OurLibraryApp.Src.App.Utils;
     using System;
     using System.Collections.Generic;
@@ -77,23 +78,50 @@ namespace OurLibrary.Models
             string[] ColumnLabels = { "No", "RecId", "BookCode", "BookId", "Available" };
             for (int i = 0; i < ColumnLabels.Length; i++)
             {
-                DetailsCol[i] = new Label() { Text = ColumnLabels[i] };
+                DetailsCol[i] = new TitleLabel(9) { Text = ColumnLabels[i] };
             }
             int ControlIndex = 5;
             for (int i = 0; i < book_record.Count; i++)
             {
                 book_record BR = book_record.ElementAt(i);
                 DetailsCol[ControlIndex++] = new Label() { Text = (i + 1).ToString() };
-                DetailsCol[ControlIndex++] = new Label() { Text = BR.id };
-                DetailsCol[ControlIndex++] = new Label() { Text = BR.book_code };
-                DetailsCol[ControlIndex++] = new Label() { Text = BR.book_id };
-                DetailsCol[ControlIndex++] = new Label() { Text = BR.available == 1 ? "yes" : "-" };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BR.id };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BR.book_code };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BR.book_id };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BR.available == 1 ? "yes" : "-" };
 
             }
             //
-            DetailPanel = ControlUtil.PopulatePanel(5, DetailsCol, 5, 70, 20, Color.Orange, 5, 5, 400, 500);
+            DetailPanel = ControlUtil.GeneratePanel(5, DetailsCol, 5, 80, 20, Color.Orange, 5, 5, 400, 500);
 
-            return DetailPanel;
+            //picturebox
+            string URL = "http://localhost:64945/Assets/Image/App/bookCover.jpg";
+            if (this.img != null)
+            {
+                URL = "http://localhost:64945/Assets/Image/Book/" + img;
+            }
+
+            PictureBox Picture = new PictureBox();
+
+        //    Picture.BorderStyle = BorderStyle.Fixed3D;
+            Picture.ImageLocation = URL;
+            Picture.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            Picture.SetBounds(100, 10, 150, 200);
+            Picture.BackColor = Color.Aqua;
+            DetailPanel.SetBounds(10, 250, DetailPanel.Width, DetailPanel.Height);
+
+            TitleLabel BookTitle = new TitleLabel(15) { Text = title };
+
+            BookTitle.TextAlign = ContentAlignment.MiddleCenter;
+            BookTitle.SetBounds(10, 200, 350, 50);
+
+            Panel Wrapper = new Panel();
+            Wrapper.Controls.Add(Picture);
+            Wrapper.Controls.Add(BookTitle);
+            Wrapper.Controls.Add(DetailPanel);
+            Wrapper.SetBounds(5, 5, 500, 1000);
+            return Wrapper;
         }
     }
 }

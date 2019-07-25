@@ -16,26 +16,39 @@ namespace OurLibraryApp.Src.App.Access
 
         private static Dictionary<string, object> FILTER_PARAM = new Dictionary<string, object>(); 
 
-        public static Dictionary<string, object> FetchObj(int Offset, int Limit, string Url, string Action, Dictionary<string, object> FilterParams = null)
+        public static Dictionary<string, object> FetchObj(int Offset, int Limit, string Url, string Action, AppUser AppUser, Dictionary<string, object> FilterParams = null)
         {
             if(FilterParams == null)
             {
                 FilterParams = new Dictionary<string, object>();
             }
-            String ParamValue = StringUtil.DictionatyToQueryString(FilterParams);
+
+            //auth
+            string Username = "";
+            string Password = "";
+
+            if(AppUser!=null && AppUser.User != null)
+            {
+                Username = AppUser.User.username;
+                Password = AppUser.User.password;
+            }
+
+            string ParamValue = StringUtil.DictionatyToQueryString(FilterParams);
             ParamValue = ParamValue.Replace("&", ";");
             Dictionary<string, object> Params = new Dictionary<string, object>
             {
-                {"offset", Offset },{"limit", Limit }, {"Action", Action },{"search_param", "${"+ParamValue+"}$" }
+                {"offset", Offset },{"limit", Limit },
+                { "Action", Action },{"search_param", "${"+ParamValue+"}$" },
+                {"u",Username }, {"p",Password }
             };
             return Request.PostReq(Url, Params);
 
         }
        
-        public static List<Dictionary<string, object>> MapList(int Offset, int Limit, string _URL, string Action, Dictionary<string, object> FilterParams)
+        public static List<Dictionary<string, object>> MapList(int Offset, int Limit, string _URL, string Action, AppUser AppUser, Dictionary<string, object> FilterParams)
         {
             int TotalCount = 0;
-            Dictionary<string, object> RespParams = FetchObj(Offset, Limit, _URL, Action, FilterParams);
+            Dictionary<string, object> RespParams = FetchObj(Offset, Limit, _URL, Action, AppUser, FilterParams);
             if(RespParams == null)
             {
                 return null;
@@ -46,7 +59,7 @@ namespace OurLibraryApp.Src.App.Access
                 Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespParams["data"].ToString());
                 if (DataMap["Array"] != null && DataMap["Array"].GetType().Equals(typeof(List<Dictionary<string, object>>)))
                 {
-                    Console.WriteLine("type array");
+                    Gui.App.Controls.CustomConsole.WriteLine("type array");
                     List<Dictionary<string, object>> ListMap = (List<Dictionary<string, object>>)DataMap["Array"];
                     ListMap.Add(new Dictionary<string, object> { { "count", TotalCount } });
                     return ListMap;

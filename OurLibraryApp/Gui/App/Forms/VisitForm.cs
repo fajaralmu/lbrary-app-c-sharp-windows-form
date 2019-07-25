@@ -42,7 +42,7 @@ namespace OurLibraryApp.Gui.App.Home
                 new Label() {Text="Input Student Id" },TxtInputID,
                 null,RecordButton
             };
-            Panel InputPanel = ControlUtil.PopulatePanel(2, ControlsList, 5, 200, 50, System.Drawing.Color.Yellow);
+            Panel InputPanel = ControlUtil.GeneratePanel(2, ControlsList, 5, 200, 50, System.Drawing.Color.Yellow);
             this.Controls.Add(InputPanel);
             Controls.Add(StudentInfoPanel);
         }
@@ -65,7 +65,7 @@ namespace OurLibraryApp.Gui.App.Home
                     new Label() {Text="Class Id" },new Label() {Text=Student.class_id }
                 };
                 
-                StudentInfoPanel = ControlUtil.PopulatePanel(2, ControlsList, 5, 200, 20, Color.Azure,5,200);
+                StudentInfoPanel = ControlUtil.GeneratePanel(2, ControlsList, 5, 200, 20, Color.Azure,5,200);
 
             }else
             {
@@ -73,7 +73,7 @@ namespace OurLibraryApp.Gui.App.Home
                 {
                     new TitleLabel(20) {Text="Student Not Found" }, null
                 };
-                StudentInfoPanel = ControlUtil.PopulatePanel(2, ControlsList, 5, 200, 70, Color.Azure, 5, 200);
+                StudentInfoPanel = ControlUtil.GeneratePanel(2, ControlsList, 5, 200, 70, Color.Azure, 5, 200);
 
             }
 

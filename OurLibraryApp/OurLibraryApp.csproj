@@ -57,32 +57,39 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\App\Controls\Constant.cs" />
+    <Compile Include="Gui\App\Controls\CustomButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gui\App\Controls\CustomConsole.cs" />
     <Compile Include="Gui\App\Controls\ReservedFor.cs" />
+    <Compile Include="Gui\App\Controls\TextBoxReadonly.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Gui\App\Controls\TitleLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Gui\App\Home\AppForm.cs">
+    <Compile Include="Gui\App\Forms\AppForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Gui\App\Home\BaseForm.cs">
+    <Compile Include="Gui\App\Forms\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Gui\App\Home\EntityForm.cs">
+    <Compile Include="Gui\App\Forms\EntityForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Gui\App\Home\IssueForm.cs">
+    <Compile Include="Gui\App\Forms\IssueForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Gui\App\Home\Loading.cs">
+    <Compile Include="Gui\App\Forms\Loading.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Gui\App\Home\ReturnForm.cs">
+    <Compile Include="Gui\App\Forms\ReturnForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Gui\App\Home\VisitForm.cs">
+    <Compile Include="Gui\App\Forms\VisitForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Gui\App\Home\LoginForm.cs">
+    <Compile Include="Gui\App\Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />

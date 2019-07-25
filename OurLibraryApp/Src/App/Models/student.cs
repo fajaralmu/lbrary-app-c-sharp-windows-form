@@ -51,6 +51,8 @@ namespace OurLibrary.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<visit> visits { get; set; }
 
+        public AppUser AppUser { get; set; }
+
         [ActionAttribute(FieldType = AttributeConstant.TYPE_DETAIL_CLICK)]
         public Panel DetailPanel()
         {
@@ -78,7 +80,7 @@ namespace OurLibrary.Models
             FilterParams.Add("ordertype", "asc");
             FilterParams.Add("issue_type", Type);
 
-            List<Dictionary<string, object>> ObjectMapList = Transaction.MapList(0, 0, Transaction.URL, "bookIssueList", FilterParams);
+            List<Dictionary<string, object>> ObjectMapList = Transaction.MapList(0, 0, Transaction.URL, "bookIssueList", AppUser, FilterParams);
 
             //generate panel
             Panel DetailPanel = new Panel();
@@ -141,9 +143,9 @@ namespace OurLibrary.Models
                 bool NotReturned = Type == "issue" && BS.book_return == 0;
 
                 DetailsCol[ControlIndex++] = new Label() { Text = (i + 1).ToString()+(NotReturned?"*":"") };
-                DetailsCol[ControlIndex++] = new Label() { Text = BS.id };
-                DetailsCol[ControlIndex++] = new Label() { Text = BS.issue_id };
-                DetailsCol[ControlIndex++] = new Label() { Text = BS.book_record_id };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.id };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.issue_id };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.book_record_id };
                 //DetailsCol[ControlIndex++] = new Label() { Text = BS.book_record.book.title };
                 DetailsCol[ControlIndex++] = new BlankControl() { Reserved = ReservedFor.BEFORE_HOR };
                 //string Type = this.type.ToLower().Trim();
@@ -153,15 +155,15 @@ namespace OurLibrary.Models
                 //}
                 //else
                 //{
-                DetailsCol[ControlIndex++] = new Label() { Text = BS.book_return.ToString() };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.book_return.ToString() };
 
                 //}
-                DetailsCol[ControlIndex++] = new Label() { Text = BS.book_issue_id };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.book_issue_id };
                 DetailsCol[ControlIndex++] = new BlankControl() { Reserved = ReservedFor.BEFORE_HOR };
             }
             //
             End:
-            DetailPanel = ControlUtil.PopulatePanel(8, DetailsCol, 5, 70, 20, Color.Orange, X, Y, W, H);
+            DetailPanel = ControlUtil.GeneratePanel(8, DetailsCol, 5, 70, 20, Color.Orange, X, Y, W, H);
             return DetailPanel;
         }
     }

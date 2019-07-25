@@ -16,13 +16,15 @@ namespace OurLibraryApp.Src.App.Data
 
         private List<book> Books = new List<book>();
 
-        public BookData() : base("bookList")
+        public BookData(AppUser AppUser) : base("bookList")
         {
+            this.AppUser = AppUser;
             ListObjServiceName = "bookList";
             Entity = typeof(book);
         }
-        public BookData(string Name) : base("bookList")
+        public BookData(string Name, AppUser AppUser) : base("bookList")
         {
+            this.AppUser = AppUser;
             Entity = typeof(book);
             this.Name = Name;
         }

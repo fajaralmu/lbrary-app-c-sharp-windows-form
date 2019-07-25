@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,10 +26,12 @@ namespace OurLibraryApp.Src.App.Data
         public int EntityTotalCount = 0;
         public EntityForm EntityForm;
         protected string ListObjServiceName;
+        protected AppUser AppUser;
+
         public string Name { get; set; }
         public BaseData(string ListSvcName)
         {
-            ListObjServiceName = ListSvcName;
+           ListObjServiceName = ListSvcName;
         }
 
         public void SetEntityForm(EntityForm EntityForm)
@@ -115,7 +118,7 @@ namespace OurLibraryApp.Src.App.Data
 
                         Panel SortPanel = ControlUtil.PopulatePanel(false, 2, new Control[] { ASCBtn, DESCBtn }, 0, 45, 17, Color.Coral);
 
-                        Panel FilterPanel = ControlUtil.PopulatePanel(1, new Control[] { FilterTxtBox ,
+                        Panel FilterPanel = ControlUtil.GeneratePanel(1, new Control[] { FilterTxtBox ,
                                 FilterBtn,SortPanel }, 5, 90, 18, Color.LightYellow);
                         //FilterPanel.MinimumSize = new Size(90, 80);
                         TableControls[ControlIndex + CustomedProp + 1] = FilterPanel;
@@ -168,7 +171,7 @@ namespace OurLibraryApp.Src.App.Data
                             {
                                 VAL = PropValue.ToString();
                             }
-                            TableControls[ControlIndex++] = new Label() { Text = VAL };
+                            TableControls[ControlIndex++] = new TextBoxReadonly() { Text = VAL };
 
                         }
 
@@ -195,8 +198,8 @@ namespace OurLibraryApp.Src.App.Data
                         {
                             BtnDetail.Click += (o, e) =>
                             {
-                                Panel DetailPanel = (Panel)Method.Invoke(obj, null);
-                                EntityForm.ShowDetail(DetailPanel);
+                                //Panel DetailPanel = (Panel)Method.Invoke(obj, null);
+                                SetDetail(Method, obj);
                             };
                             BtnDetail.Enabled = true;
                             goto next;
@@ -207,8 +210,23 @@ namespace OurLibraryApp.Src.App.Data
                 TableControls[ControlIndex++] = BtnDetail;
 
             }
-            return ControlUtil.PopulatePanel(CustomedProp + 2, TableControls, 5, 100, 30, Color.White, 5, 130, Constant.ENTITY_PANEL_WIDTH, Constant.ENTITY_PANEL_HEIGHT);
+            return ControlUtil.GeneratePanel(CustomedProp + 2, TableControls, 5, 100, 30, Color.White, 5, 130, Constant.ENTITY_PANEL_WIDTH, Constant.ENTITY_PANEL_HEIGHT);
 
+        }
+
+        private void SetDetail(MethodInfo Method, object obj)
+        {
+            Loading LoadingMsg = new Loading("LOADING");
+
+            Thread thread2 = new Thread(new ThreadStart(()=>
+            {
+                Panel DetailPanel = (Panel)Method.Invoke(obj, null);
+                EntityForm.ShowDetail(DetailPanel, LoadingMsg);
+               
+            }));
+            thread2.Start();
+            
+            
         }
 
         internal Panel UpdateData(int offset, int limit)
@@ -223,7 +241,7 @@ namespace OurLibraryApp.Src.App.Data
 
         public Dictionary<string, object> GetList(int Offset, int Limit, Dictionary<string, object> FilterParams, string ServiceName)
         {
-            List<Dictionary<string, object>> ObjectMapList = Transaction.MapList(Offset, Limit, Transaction.URL, ServiceName, FilterParams);
+            List<Dictionary<string, object>> ObjectMapList = Transaction.MapList(Offset, Limit, Transaction.URL, ServiceName, AppUser, FilterParams);
             if(ObjectMapList == null)
             {
                 return null;

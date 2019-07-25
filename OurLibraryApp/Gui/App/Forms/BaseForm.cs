@@ -1,4 +1,5 @@
-﻿using OurLibraryApp.Src.App.Access;
+﻿using OurLibraryApp.Gui.App.Controls;
+using OurLibraryApp.Src.App.Access;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,19 +19,21 @@ namespace OurLibraryApp.Gui.App.Home
         public BaseForm()
         {
             Name = "Default";
+            Font = new System.Drawing.Font("Arial", 12);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
         }
+
 
         protected override void OnCreateControl()
         {
             this.CenterToScreen();
-            Console.WriteLine("Show " + this.Name + " Form");
+            CustomConsole.WriteLine("Show " + this.Name + " Form");
             base.OnCreateControl();
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            Console.WriteLine("Close " + this.Name + " Form");
+            CustomConsole.WriteLine("Close " + this.Name + " Form");
           
             base.OnClosed(e);
         }

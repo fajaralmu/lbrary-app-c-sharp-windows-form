@@ -9,7 +9,7 @@ namespace OurLibraryApp.Src.App.Access
 {
      
 
-    class AppUser
+    public class AppUser
     {
         public user User { set; get; }
     }

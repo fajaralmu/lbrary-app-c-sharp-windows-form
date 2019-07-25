@@ -19,9 +19,8 @@ namespace OurLibrary.Models
     using System.Windows.Forms;
 
     [Serializable]
-    public partial class issue
+    public class issue
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public issue()
         {
             this.book_issue = new List<book_issue>();
@@ -32,6 +31,7 @@ namespace OurLibrary.Models
         public string id { get; set; }
         [FieldAttribute(FieldType = AttributeConstant.TYPE_READONLY)]
 
+        public AppUser appUser { get; set; }
 
         public System.DateTime date { get; set; }
         //      [FieldAttribute(FieldType = AttributeConstant.TYPE_READONLY)]
@@ -60,16 +60,17 @@ namespace OurLibrary.Models
         public virtual student student { get; set; }
         public virtual user user { get; set; }
 
+
         [ActionAttribute(FieldType = AttributeConstant.TYPE_DETAIL_CLICK)]
         public Panel DetailPanel()
         {
             Panel DetailPanel = new Panel();
             Control[] DetailsCol = new Control[7 * (book_issue.Count + 1)];
             //update
-            string[] ColumnLabels = { "No", "IssueId", "RecId", "Title", "", "Returned", type.Trim()+" item id" };
+            string[] ColumnLabels = { "No", "IssueId", "RecId", "Title", "", "Returned", type.Trim() + " item id" };
             for (int i = 0; i < ColumnLabels.Length; i++)
             {
-                DetailsCol[i] = new Label() { Text = ColumnLabels[i] };
+                DetailsCol[i] = new TitleLabel(11) { Text = ColumnLabels[i] };
             }
             int ControlIndex = 7;
             for (int i = 0; i < book_issue.Count; i++)
@@ -78,7 +79,7 @@ namespace OurLibrary.Models
 
                 if (type.Trim().Equals("issue"))
                 {
-                    Dictionary<string, object> CheckReturnResponse = Transaction.FetchObj(0, 0, Transaction.URL, "checkReturnedBook", new Dictionary<string, object>()
+                    Dictionary<string, object> CheckReturnResponse = Transaction.FetchObj(0, 0, Transaction.URL, "checkReturnedBook", appUser, new Dictionary<string, object>()
                         {
                             {"book_issue_id",BS.id }
                         });
@@ -89,9 +90,9 @@ namespace OurLibrary.Models
                 }
 
                 DetailsCol[ControlIndex++] = new Label() { Text = (i + 1).ToString() };
-                DetailsCol[ControlIndex++] = new Label() { Text = BS.id };
-                DetailsCol[ControlIndex++] = new Label() { Text = BS.book_record_id };
-                DetailsCol[ControlIndex++] = new Label() { Text = BS.book_record.book.title };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.id };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.book_record_id };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.book_record.book.title };
                 DetailsCol[ControlIndex++] = new BlankControl() { Reserved = ReservedFor.BEFORE_HOR };
                 string Type = this.type.ToLower().Trim();
                 if (Type == ("return"))
@@ -106,18 +107,23 @@ namespace OurLibrary.Models
                 DetailsCol[ControlIndex++] = new Label() { Text = BS.book_issue_id };
             }
             //
-            DetailPanel = ControlUtil.PopulatePanel(7, DetailsCol, 5, 70, 20, Color.Orange, 5, 200);
+            DetailPanel = ControlUtil.GeneratePanel(7, DetailsCol, 5, 80, 20, Color.Orange, 5, 250);
 
             student Student = UserClient.StudentById(student_id);
 
-            Panel StudentDetail = ControlUtil.PopulatePanel(1, new Control[]
+            Panel StudentDetail = ControlUtil.GeneratePanel(1, new Control[]
             {
-                new Label() {Text= type.ToUpper()+" ID         : "+id },
-                new Label() {Text= "Date             : "+date },
-                new Label() {Text= "Student ID       : "+Student.id },
-                new Label() {Text= "Student Name     : "+Student.name },
-                new Label() {Text= "Student ClassId  : "+Student.class_id },
-            }, 5, 200, 20, Color.Yellow, 5, 5, 500);
+                new Label() {Text= type.ToUpper().Trim()+" ID"},
+                new TextBoxReadonly(13) {Text=id },
+                new Label() {Text= "Date" },
+                new TextBoxReadonly(13) {Text=date.ToString() },
+                new Label() {Text= "Student ID" },
+                new TextBoxReadonly(13) {Text=Student.id },
+                new Label() {Text= "Student Name" },
+                new TextBoxReadonly(13) {Text=Student.name },
+                new Label() {Text= "Student ClassId"},
+                new TextBoxReadonly(13) {Text=Student.class_id },
+            }, 5, 200, 17, Color.Yellow, 5, 5, 500);
 
             Panel Wrapper = new Panel();
             Wrapper.Controls.Add(StudentDetail);

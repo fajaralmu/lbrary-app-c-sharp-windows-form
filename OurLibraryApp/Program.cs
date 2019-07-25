@@ -15,6 +15,7 @@ namespace OurLibraryApp
        
         static void Main(string[] args)
         {
+            Gui.App.Controls.CustomConsole.WriteLine("BEGIN LIBRARY APP");
             Application.Run(new AppForm(null));
             Console.ReadLine();
         }
