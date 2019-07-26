@@ -108,8 +108,14 @@ namespace OurLibraryApp.Gui.App.Home
         {
             ISyncInvoke.InvokeAsync(this, (f) =>
             {
-                DetailPanel.Controls.Clear();
-                DetailPanel.Controls.Add(_DetailPanel);
+                try
+                {
+                    DetailPanel.Controls.Clear();
+                    DetailPanel.Controls.Add(_DetailPanel);
+                }catch(Exception e)
+                {
+                    MessageBox.Show("Server Error");
+                }
                 L.Dispose();
             });
         }

@@ -60,7 +60,7 @@ namespace OurLibraryApp.Gui.App.Home
                     new Label() {Text="Visit ID" }, new Label() {Text=Student.visits.ElementAt(0).id.ToString() },
                     new Label() {Text="Time" }, new Label() {Text=Student.visits.ElementAt(0).date.ToString() },
                     null,null,
-                    new Label() {Text="ID" }, new Label() {Text=Student.id },
+                    new Label() {Text="ID" }, new Label() {Text=Student.visits.ElementAt(0).student_id },
                     new Label() {Text="Name" }, new Label() {Text=Student.name },
                     new Label() {Text="Class Id" },new Label() {Text=Student.class_id }
                 };

@@ -37,7 +37,7 @@ namespace OurLibraryApp.Src.App.Access
                  {"Id", Id }
             };
             Dictionary<string, object> RespParams = Request.PostReq("http://localhost:64945/Web/API/Info", Params);
-            if (RespParams["result"] != null && RespParams["result"].ToString() == "0")
+            if (RespParams != null && RespParams["result"] != null && RespParams["result"].ToString() == "0")
             {
                 Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespParams["data"].ToString());
                 Dictionary<string, object> StdMap = StringUtil.JSONStringToMap(DataMap["student"].ToString());
@@ -60,19 +60,30 @@ namespace OurLibraryApp.Src.App.Access
             return null;
         }
 
-        public static student StudentById(string Id)
+        public static student StudentById(string Id, AppUser AppUser)
         {
+
+            string Username = "";
+            string Password = "";
+
+            if (AppUser != null && AppUser.User != null)
+            {
+                Username = AppUser.User.username;
+                Password = AppUser.User.password;
+            }
+
             Dictionary<string, object> Params = new Dictionary<string, object>
             {
                 {"Action", "studentById" },
-                 {"Id", Id }
+                 {"Id", Id }, {"u",Username }, {"p",Password }
             };
+
             Dictionary<string, object> RespParams = Request.PostReq("http://localhost:64945/Web/API/Info", Params);
             if (RespParams["result"] != null && RespParams["result"].ToString() == "0")
             {
                 Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespParams["data"].ToString());
                 Dictionary<string, object> StdMap = StringUtil.JSONStringToMap(DataMap["student"].ToString());
-                
+
                 return new student()
                 {
                     id = Id,
