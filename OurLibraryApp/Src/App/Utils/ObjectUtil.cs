@@ -113,6 +113,11 @@ namespace OurLibraryApp.Src.App.Utils
                         Value = ((JObject)ObjMap[key]).ToObject(typeof(Dictionary<string, object>));
                     }
                     else
+                    if (KeyType.Equals(typeof(Int64)))
+                    {
+                        Value = Convert.ToInt32(ObjMap[key]);
+                    }
+                    else
                     {
                         Value = ObjMap[key];
                     }

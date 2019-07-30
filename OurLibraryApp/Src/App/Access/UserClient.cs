@@ -31,9 +31,34 @@ namespace OurLibraryApp.Src.App.Access
             return null;
         }
 
+        public static book_issue GetByStudentAndRecId(student Student, string RecId, AppUser AppUser)
+        {
+            if (Student == null)
+            {
+                return null;
+            }
+            Dictionary<string, object> Params = MixParamWithUnP(
+               new Dictionary<string, object>()
+               {
+                    {"Action","getBookIssueByStudentId" },
+                    {"student_id",Student.id },
+                    {"rec_id",RecId }
+               },
+               AppUser);
+            Dictionary<string, object> RespParams = Request.PostReq(Transaction.URL, Params);
+            if (RespParams != null && RespParams["result"] != null && RespParams["result"].ToString() == "0")
+            {
+                Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespParams["data"].ToString());
+                Dictionary<string, object> BookIssueMap = StringUtil.JSONStringToMap(DataMap["book_issue"].ToString());
+
+                return (book_issue)ObjectUtil.FillObjectWithMap(new book_issue(), BookIssueMap);
+            }
+            return null;
+        }
+
         public static issue SubmitIssue(List<book_issue> BookIssues, string StudentId, AppUser AppUser)
         {
-            string BookRecs = ObjectUtil.ListToDelimitedString(BookIssues, ";","-", "book_record_id");
+            string BookRecs = ObjectUtil.ListToDelimitedString(BookIssues, ";", "-", "book_record_id");
 
             Dictionary<string, object> Params = MixParamWithUnP(
                 new Dictionary<string, object>()
@@ -49,6 +74,51 @@ namespace OurLibraryApp.Src.App.Access
                 Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespParams["data"].ToString());
                 string IssueId = DataMap["issue_id"].ToString();
                 string Date = DataMap["date"].ToString();
+                string[] BookIssuesString = DataMap["items"].ToString().Split(';');
+                List<book_issue> BookIssuesList = new List<book_issue>();
+                if (BookIssuesString.Length > 0)
+                    foreach (string Item in BookIssuesString)
+                    {
+                        string[] Ids = Item.Split('~');
+                        book_issue BS = new book_issue()
+                        {
+                            id = Ids[1],
+                            book_record_id = Ids[0]
+                        };
+                        BookIssuesList.Add(BS);
+                    }
+                issue Issue = new issue()
+                {
+                    id = IssueId,
+                    date = DateTime.Parse(Date),
+                    book_issue = BookIssuesList
+                };
+                return Issue;
+            }
+            return null;
+        }
+
+
+        public static issue SubmitReturn(List<book_issue> BookIssues, string StudentId, AppUser AppUser)
+        {
+            string BookRecs = ObjectUtil.ListToDelimitedString(BookIssues, ";", "-", "book_record_id","book_issue_id");
+
+            Dictionary<string, object> Params = MixParamWithUnP(
+                new Dictionary<string, object>()
+                {
+                    {"Action","returnBook" },
+                    {"student_id",StudentId },
+                    {"book_recs",BookRecs }
+                },
+                AppUser);
+            Dictionary<string, object> RespParams = Request.PostReq(Transaction.URL, Params);
+            if (RespParams != null && RespParams["result"] != null && RespParams["result"].ToString() == "0")
+            {
+                Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespParams["data"].ToString());
+                string IssueId = DataMap["issue_id"].ToString();
+                string Date = DataMap["date"].ToString();
+                if (DataMap["items"] == null || DataMap["items"].ToString().Equals(""))
+                    return null;
                 string[] BookIssuesString = DataMap["items"].ToString().Split(';');
                 List<book_issue> BookIssuesList = new List<book_issue>();
                 if (BookIssuesString.Length > 0)

@@ -15,6 +15,7 @@ namespace OurLibraryApp.Gui.App.Home
         private VisitForm  FormVisit;
         private EntityForm EntityForm;
         private IssueForm IssueForm;
+        private ReturnForm ReturnForm;
         private Panel MainPanel = new Panel();
 
         public AppForm(AppUser User)
@@ -83,14 +84,15 @@ namespace OurLibraryApp.Gui.App.Home
                 MasterMenu.MenuItems.Add(new MenuItem("&Book Record", new EventHandler(ShowBookRecord)));
                 MasterMenu.MenuItems.Add(new MenuItem("&Student", new EventHandler(ShowStudentRecord)));
 
-                MenuItem HistoryMenu = Menus.MenuItems.Add("&History");
-                HistoryMenu.MenuItems.Add(new MenuItem("&Transaction History", new EventHandler(ShowTransactionRecord)));
-                HistoryMenu.MenuItems.Add(new MenuItem("&Visit Recorder", new EventHandler(ShowVisit)));
-                HistoryMenu.MenuItems.Add(new MenuItem("&Visit History", new EventHandler(ShowVisitRecord)));
+                MenuItem RecordMenu = Menus.MenuItems.Add("&Records");
+                RecordMenu.MenuItems.Add(new MenuItem("&Transaction History", new EventHandler(ShowTransactionRecord)));
+                RecordMenu.MenuItems.Add(new MenuItem("&Visit Recorder", new EventHandler(ShowVisit)));
+                RecordMenu.MenuItems.Add(new MenuItem("&Visit History", new EventHandler(ShowVisitRecord)));
 
-                MenuItem AdminMenu = Menus.MenuItems.Add("&Transaction");
-                AdminMenu.MenuItems.Add(new MenuItem("&Issue Book", new EventHandler(ShowIssueBook)));
-               
+                MenuItem TrxMenu = Menus.MenuItems.Add("&Transaction");
+                TrxMenu.MenuItems.Add(new MenuItem("&Issue Book", new EventHandler(ShowIssueBook)));
+                TrxMenu.MenuItems.Add(new MenuItem("&Return Book", new EventHandler(ShowReturnBook)));
+
                 Menus.MenuItems.Add(LogoutMenu);
 
                 
@@ -104,6 +106,11 @@ namespace OurLibraryApp.Gui.App.Home
             Setting.Click += new EventHandler(SettingClick);
             Menus.MenuItems.Add(Setting);
             this.Menu = Menus;
+        }
+
+        private void ShowReturnBook(object sender, EventArgs e)
+        {
+            ReturnForm = new ReturnForm(this);
         }
 
         private void ShowIssueBook(object sender, EventArgs e)

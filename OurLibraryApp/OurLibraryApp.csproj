@@ -77,13 +77,13 @@
     <Compile Include="Gui\App\Forms\EntityForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Gui\App\Forms\ReturnForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Gui\App\Forms\IssueForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Gui\App\Forms\Loading.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\App\Forms\ReturnForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Gui\App\Forms\SettingForm.cs">
