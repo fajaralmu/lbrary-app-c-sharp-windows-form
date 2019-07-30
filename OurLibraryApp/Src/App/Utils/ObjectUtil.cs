@@ -49,7 +49,7 @@ namespace OurLibraryApp.Src.App.Utils
 
         public static bool HasProperty(string PropName, object O)
         {
-            if(O== null)
+            if (O == null)
             {
                 O = new object();
             }
@@ -110,8 +110,9 @@ namespace OurLibraryApp.Src.App.Utils
                     else
                     if (KeyType.Equals(typeof(JObject)))
                     {
-                        Value = ((JObject)ObjMap[key]).ToObject(typeof(Dictionary<string,object>));
-                    }else
+                        Value = ((JObject)ObjMap[key]).ToObject(typeof(Dictionary<string, object>));
+                    }
+                    else
                     {
                         Value = ObjMap[key];
                     }
@@ -124,7 +125,7 @@ namespace OurLibraryApp.Src.App.Utils
                         object ObjValue = Activator.CreateInstance(OBJ.GetType().GetProperty(key).PropertyType);
                         Value = FillObjectWithMap(ObjValue, (Dictionary<string, object>)Value);
                     }
-                    else if (Value.GetType().Equals(typeof(List<>))|| Value.GetType().Equals(typeof(ICollection)))
+                    else if (Value.GetType().Equals(typeof(List<>)) || Value.GetType().Equals(typeof(ICollection)))
                     {
                         List<object> ObjList = new List<object>();
                         List<object> ValList = (List<object>)Value;
@@ -146,5 +147,70 @@ namespace OurLibraryApp.Src.App.Utils
             }
             return OBJ;
         }
+
+        public static string[] ValidateProps(string[] Props, object Obj)
+        {
+            List<string> ValidProp = new List<string>();
+            for (int j = 0; j < Props.Length; j++)
+            {
+                string Prop = Props[j];
+                if (HasProperty(Prop, Obj))
+                {
+                    ValidProp.Add(Prop);
+                }
+            }
+            return ValidProp.ToArray<string>();
+        }
+
+        public static List<object> ICollectionToListObj(ICollection Collection)
+        {
+            List<object> List = new List<object>();
+            foreach (var item in Collection)
+            {
+                if (item == null)
+                    continue;
+                List.Add(item);
+            }
+            return List;
+        }
+
+        public static string ListToDelimitedString(object ListOfObject, string Delimiter, string ValDelimiter, params string[] Props)
+        {
+            String ListString = "";
+            if (ListOfObject == null)
+                return "";
+            List<object> List = ICollectionToListObj((ICollection)ListOfObject);
+
+            string[] ValidProps = ValidateProps(Props, List.ElementAt(0));
+
+            for (int i = 0; i < List.Count; i++)
+
+            {
+                object Obj = List.ElementAt(i);
+                string Value = "";
+                for (int j = 0; j < ValidProps.Length; j++)
+                {
+                    string Prop = ValidProps[j];
+                    Value += GetValueFromProp(Prop, Obj).ToString();
+                    if (j < ValidProps.Length - 1)
+                    {
+                        Value += ValDelimiter;
+                    }
+                }
+                ListString += Value;
+                if (i < List.Count - 1)
+                {
+                    ListString += Delimiter;
+                }
+
+            }
+            return ListString;
+        }
+
+        public static object GetValueFromProp(string propname, object Object)
+        {
+            return Object.GetType().GetProperty(propname).GetValue(Object);
+        }
     }
 }
+

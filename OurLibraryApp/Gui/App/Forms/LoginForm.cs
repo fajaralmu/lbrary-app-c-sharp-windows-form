@@ -71,7 +71,7 @@ namespace OurLibraryApp.Gui.App.Home
                 {
                     MessageBox.Show("Login Berhasil!", "Info");
                     RefForm.TheUser = new AppUser() { User = LoggedUser };
-                    RefForm.Update();
+                    RefForm.UpdateForm();
                     LoadingMsg.Dispose();
                     this.Dispose();
                 }

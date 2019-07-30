@@ -86,6 +86,9 @@
     <Compile Include="Gui\App\Forms\ReturnForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Gui\App\Forms\SettingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Gui\App\Forms\VisitForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +105,7 @@
     <Compile Include="Src\App\Annotation\ActionAttribute.cs" />
     <Compile Include="Src\App\Annotation\FieldAttribute.cs" />
     <Compile Include="Src\App\Data\BaseData.cs" />
+    <Compile Include="Src\App\Data\Setting.cs" />
     <Compile Include="Src\App\Data\VisitData.cs" />
     <Compile Include="Src\App\Data\TransactionData.cs" />
     <Compile Include="Src\App\Data\StudentData.cs" />

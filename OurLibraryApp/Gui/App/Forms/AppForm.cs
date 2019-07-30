@@ -1,4 +1,5 @@
 ﻿using OurLibraryApp.Gui.App.Controls;
+using OurLibraryApp.Gui.App.Forms;
 using OurLibraryApp.Src.App.Access;
 using OurLibraryApp.Src.App.Data;
 using OurLibraryApp.Src.App.Utils;
@@ -10,15 +11,17 @@ namespace OurLibraryApp.Gui.App.Home
     partial class AppForm : BaseForm
     {
         private LoginForm FormLogin;
+        private SettingForm SettingForm;
         private VisitForm  FormVisit;
         private EntityForm EntityForm;
+        private IssueForm IssueForm;
         private Panel MainPanel = new Panel();
 
         public AppForm(AppUser User)
         {
             TheUser = User;
             Init();
-            Update();
+            UpdateForm();
         }
 
         public void Init()
@@ -35,10 +38,10 @@ namespace OurLibraryApp.Gui.App.Home
         protected void BtnLogn_Click(object Sender, EventArgs ev)
         {
             TheUser = null;
-            Update();
+            UpdateForm();
         }
 
-        public void Update()
+        public void UpdateForm()
         {
             this.Show();
             MainPanel.Controls.Clear();
@@ -51,41 +54,66 @@ namespace OurLibraryApp.Gui.App.Home
                 Control[] ControlParam = { AppLabel, WelcomeLabel };
                 Panel HeaderPanel = ControlUtil.GeneratePanel(1, ControlParam, 5, 400, 50, System.Drawing.Color.Blue);
                 MainPanel.Controls.Add(HeaderPanel);
-                AddMenus();
+                AddMenus(true);
                 this.Enabled = true;
             }
             else
             {
-                FormLogin = new LoginForm(this);
-                FormLogin.Show();
-                FormLogin.Focus();
+                AddMenus(false);
+               
                 CustomConsole.WriteLine("User Not OK");
-                this.Enabled = false;
+               
             }
         }
 
-        private void AddMenus()
+
+
+        private void AddMenus(bool UserLoggedIn)
         {
-
-            MenuItem LogoutMenu = new MenuItem("&LogOut");
-            LogoutMenu.Click += new EventHandler(LogOutClick);
-
             MainMenu Menus = new MainMenu();
-            Menus.Name = "Master Data";
 
-            MenuItem MasterMenu = Menus.MenuItems.Add("&Master");
-            MasterMenu.MenuItems.Add(new MenuItem("&Book Record", new EventHandler(ShowBookRecord)));
-            MasterMenu.MenuItems.Add(new MenuItem("&Student", new EventHandler(ShowStudentRecord)));
-            
-            MenuItem AdminMenu = Menus.MenuItems.Add("&Admin");
-            AdminMenu.MenuItems.Add(new MenuItem("&Transactions", new EventHandler(ShowTransactionRecord)));
-            AdminMenu.MenuItems.Add(new MenuItem("&Visit Recorder", new EventHandler(ShowVisit)));
-            AdminMenu.MenuItems.Add(new MenuItem("&Visit History", new EventHandler(ShowVisitRecord)));
+            if (UserLoggedIn)
+            {
+                MenuItem LogoutMenu = new MenuItem("&LogOut");
+                LogoutMenu.Click += new EventHandler(LogOutClick);
 
+                Menus.Name = "Master Data";
 
-            Menus.MenuItems.Add(LogoutMenu);
+                MenuItem MasterMenu = Menus.MenuItems.Add("&Master");
+                MasterMenu.MenuItems.Add(new MenuItem("&Book Record", new EventHandler(ShowBookRecord)));
+                MasterMenu.MenuItems.Add(new MenuItem("&Student", new EventHandler(ShowStudentRecord)));
 
+                MenuItem HistoryMenu = Menus.MenuItems.Add("&History");
+                HistoryMenu.MenuItems.Add(new MenuItem("&Transaction History", new EventHandler(ShowTransactionRecord)));
+                HistoryMenu.MenuItems.Add(new MenuItem("&Visit Recorder", new EventHandler(ShowVisit)));
+                HistoryMenu.MenuItems.Add(new MenuItem("&Visit History", new EventHandler(ShowVisitRecord)));
+
+                MenuItem AdminMenu = Menus.MenuItems.Add("&Transaction");
+                AdminMenu.MenuItems.Add(new MenuItem("&Issue Book", new EventHandler(ShowIssueBook)));
+               
+                Menus.MenuItems.Add(LogoutMenu);
+
+                
+            }else
+            {
+                MenuItem Login = new MenuItem("&LOGIN");
+                Login.Click += new EventHandler(LoginClick);
+                Menus.MenuItems.Add(Login);
+            }
+            MenuItem Setting = new MenuItem("&Setting");
+            Setting.Click += new EventHandler(SettingClick);
+            Menus.MenuItems.Add(Setting);
             this.Menu = Menus;
+        }
+
+        private void ShowIssueBook(object sender, EventArgs e)
+        {
+            IssueForm = new IssueForm(this);
+        }
+
+        protected void SettingClick(object Sender, EventArgs ev)
+        {
+            SettingForm Setting = new SettingForm(this);
         }
 
         private void ShowVisitRecord(object sender, EventArgs e)
@@ -114,6 +142,14 @@ namespace OurLibraryApp.Gui.App.Home
 
         }
 
+        protected void LoginClick(object s, EventArgs ev)
+        {
+            FormLogin = new LoginForm(this);
+            FormLogin.Show();
+            FormLogin.Focus();
+            this.Enabled = false;
+        }
+
         protected void LogOutClick(object Sender, EventArgs ev)
         {
             var Confirm = MessageBox.Show("Yakin akan keluar ??",
@@ -122,7 +158,7 @@ namespace OurLibraryApp.Gui.App.Home
             if (Confirm == DialogResult.Yes)
             {
                 this.TheUser = null;
-                Update();
+                UpdateForm();
             }
 
         }

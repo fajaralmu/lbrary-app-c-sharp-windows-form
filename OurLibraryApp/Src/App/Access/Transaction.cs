@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OurLibrary.Models;
+using OurLibraryApp.Src.App.Data;
 using OurLibraryApp.Src.App.Utils;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace OurLibraryApp.Src.App.Access
 {
     class Transaction
     {
-        public const string URL = "http://localhost:64945/Web/API/Info";
+        public static string Host = GeneralSetting.ServerAddress.Trim().Replace("http://","");
+        public static string URL = "http://"+ Host + "/Web/API/Info";
 
         private static Dictionary<string, object> FILTER_PARAM = new Dictionary<string, object>(); 
 
