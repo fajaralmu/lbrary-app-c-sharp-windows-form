@@ -46,7 +46,35 @@ namespace OurLibraryApp.Src.App.Access
             return Request.PostReq(Url, Params);
 
         }
-       
+
+        public static Dictionary<string, object> PostInput(string Url, string Action, AppUser AppUser, Dictionary<string, object> FilterParams = null)
+        {
+            if (FilterParams == null)
+            {
+                FilterParams = new Dictionary<string, object>();
+            }
+
+            //auth
+            string Username = "";
+            string Password = "";
+
+            if (AppUser != null && AppUser.User != null)
+            {
+                Username = AppUser.User.username;
+                Password = AppUser.User.password;
+            }
+
+            string ParamValue = StringUtil.DictionatyToQueryString(FilterParams);
+            ParamValue = ParamValue.Replace("&", ";");
+            Dictionary<string, object> Params = new Dictionary<string, object>
+            {
+                { "Action", Action },{"field_param", "${"+ParamValue+"}$" },
+                {"u",Username }, {"p",Password }
+            };
+            return Request.PostReq(Url, Params);
+
+        }
+
         public static List<Dictionary<string, object>> MapList(int Offset, int Limit, string _URL, string Action, AppUser AppUser, Dictionary<string, object> FilterParams)
         {
             int TotalCount = 0;

@@ -13,7 +13,7 @@ namespace OurLibraryApp.Gui.App.Controls
 
         public BlankControl()
         {
-
+            Reserved = ReservedFor.BEFORE_HOR;
         }
     }
 }

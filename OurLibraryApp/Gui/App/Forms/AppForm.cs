@@ -81,8 +81,12 @@ namespace OurLibraryApp.Gui.App.Home
                 Menus.Name = "Master Data";
 
                 MenuItem MasterMenu = Menus.MenuItems.Add("&Master");
-                MasterMenu.MenuItems.Add(new MenuItem("&Book Record", new EventHandler(ShowBookRecord)));
+                MasterMenu.MenuItems.Add(new MenuItem("&Book", new EventHandler(ShowBookRecord)));
                 MasterMenu.MenuItems.Add(new MenuItem("&Student", new EventHandler(ShowStudentRecord)));
+                MasterMenu.MenuItems.Add(new MenuItem("&Category", new EventHandler(ShowCategoryRecord)));
+                MasterMenu.MenuItems.Add(new MenuItem("&Publisher", new EventHandler(ShowPublisherRecord)));
+                MasterMenu.MenuItems.Add(new MenuItem("&Author", new EventHandler(ShowAuthorRecord)));
+                MasterMenu.MenuItems.Add(new MenuItem("&Class", new EventHandler(ShowClassRecord)));
 
                 MenuItem RecordMenu = Menus.MenuItems.Add("&Records");
                 RecordMenu.MenuItems.Add(new MenuItem("&Transaction History", new EventHandler(ShowTransactionRecord)));
@@ -106,6 +110,30 @@ namespace OurLibraryApp.Gui.App.Home
             Setting.Click += new EventHandler(SettingClick);
             Menus.MenuItems.Add(Setting);
             this.Menu = Menus;
+        }
+
+        private void ShowCategoryRecord(object sender, EventArgs e)
+        {
+            CategoryData Data = new CategoryData("Book Categories", TheUser);
+            EntityForm = new EntityForm(this, Data);
+        }
+
+        private void ShowAuthorRecord(object sender, EventArgs e)
+        {
+            AuthorData Data = new AuthorData("Book Author", TheUser);
+            EntityForm = new EntityForm(this, Data);
+        }
+
+        private void ShowPublisherRecord(object sender, EventArgs e)
+        {
+            PublisherData Data = new PublisherData("Book Publisher", TheUser);
+            EntityForm = new EntityForm(this, Data);
+        }
+
+        private void ShowClassRecord(object sender, EventArgs e)
+        {
+            ClassData Data = new ClassData("Class", TheUser);
+            EntityForm = new EntityForm(this, Data);
         }
 
         private void ShowReturnBook(object sender, EventArgs e)

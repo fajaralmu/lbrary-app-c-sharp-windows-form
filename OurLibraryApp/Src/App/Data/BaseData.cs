@@ -1,5 +1,6 @@
 ﻿using OurLibrary.Annotation;
 using OurLibraryApp.Gui.App.Controls;
+using OurLibraryApp.Gui.App.Forms;
 using OurLibraryApp.Gui.App.Home;
 using OurLibraryApp.Src.App.Access;
 using OurLibraryApp.Src.App.Utils;
@@ -132,7 +133,7 @@ namespace OurLibraryApp.Src.App.Data
             ControlIndex += 2 * (CustomedProp + 2);
 
             int No = Offset * Limit;
-            foreach (object obj in EntityList)
+            foreach (object Object in EntityList)
             {
                 No++;
                 string NoStr = Convert.ToString(No);
@@ -146,7 +147,7 @@ namespace OurLibraryApp.Src.App.Data
                         FieldAttribute Attribute = (FieldAttribute)Attributes[0];
                         if (Attribute.FieldType != null)
                         {
-                            object PropValue = obj.GetType().GetProperty(PropsInfo.Name).GetValue(obj);
+                            object PropValue = Object.GetType().GetProperty(PropsInfo.Name).GetValue(Object);
                             string VAL = "-";
                             if (PropValue != null && Attribute.ClassReference != null && Attribute.ClassAttributeConverter != null)
                             {
@@ -185,9 +186,21 @@ namespace OurLibraryApp.Src.App.Data
                     }
 
                 }
+                Panel PanelButton = new Panel();
+                Button BtnDetail = new Button() { Text = "Detail" };
+                Button BtnEdit = new Button() { Text = "Edit" };
+                BtnEdit.Click += (o, e) =>
+                {
+                  Panel EditPanel=  ShowAddForm(Object);
 
-                Button BtnDetail = new Button() { Text = "Detail", Enabled = false };
-
+                    EntityForm.addForm = new AddForm(EditPanel, this);
+                    EntityForm. addForm.Show();
+                };
+                BtnDetail.Click += (o, e) =>
+                {
+                    SetDetailV2(Object);
+                };
+                /*
                 foreach (MethodInfo Method in Entity.GetMethods())
                 {
                     object[] Attributes = Method.GetCustomAttributes(typeof(ActionAttribute), true);
@@ -205,9 +218,13 @@ namespace OurLibraryApp.Src.App.Data
                             goto next;
                         }
                     }
-                }
+                }*/
+                PanelButton = ControlUtil.GeneratePanel(2, new Control[]
+                {
+                    BtnDetail, BtnEdit
+                },1,50,20,Color.BlueViolet);
                 next:
-                TableControls[ControlIndex++] = BtnDetail;
+                TableControls[ControlIndex++] = PanelButton;
 
             }
             return ControlUtil.GeneratePanel(CustomedProp + 2, TableControls, 5, 100, 30, Color.White, 5, 130, Constant.ENTITY_PANEL_WIDTH, Constant.ENTITY_PANEL_HEIGHT);
@@ -227,6 +244,20 @@ namespace OurLibraryApp.Src.App.Data
             thread2.Start();
             
             
+        }
+        private void SetDetailV2( object obj)
+        {
+            Loading LoadingMsg = new Loading("LOADING");
+
+            Thread thread2 = new Thread(new ThreadStart(() =>
+            {
+                Panel DetailPanel = ShowDetailPanel(obj);
+                EntityForm.ShowDetail(DetailPanel, LoadingMsg);
+
+            }));
+            thread2.Start();
+
+
         }
 
         internal Panel UpdateData(int offset, int limit)
@@ -255,6 +286,31 @@ namespace OurLibraryApp.Src.App.Data
             return new Dictionary<string, object>();
         }
 
+        public void GenerateInsertForm()
+        {
+            Panel InsertPanel = new Panel();
 
+
+        }
+
+        protected virtual Panel ShowDetailPanel(object Object)
+        {
+            return new Panel();
+        }
+
+        public virtual Panel ShowAddForm(object o = null)
+        {
+            return new Panel();
+        }
+
+        protected virtual void UpdateList()
+        {
+
+        }
+
+        protected virtual void ClearAllFields()
+        {
+
+        }
     }
 }

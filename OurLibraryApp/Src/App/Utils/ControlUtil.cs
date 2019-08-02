@@ -97,5 +97,16 @@ namespace OurLibraryApp.Src.App.Utils
             float ratio = Math.Min(hRatio, wRatio);
             return font.Size * ratio;
         }
+
+        public static ComboBox FillComboInteger(int begin, int end)
+        {
+
+            ComboBox Cbx = new ComboBox();
+            for(int i = begin; i <= end; i++)
+            {
+                Cbx.Items.Add(i);
+            }
+            return Cbx;
+        }
     }
 }

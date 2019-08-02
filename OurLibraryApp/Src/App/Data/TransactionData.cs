@@ -1,4 +1,5 @@
 ﻿using OurLibrary.Models;
+using OurLibraryApp.Gui.App.Controls;
 using OurLibraryApp.Gui.App.Home;
 using OurLibraryApp.Src.App.Access;
 using OurLibraryApp.Src.App.Utils;
@@ -69,6 +70,83 @@ namespace OurLibraryApp.Src.App.Data
                 {"totalCount",TotalCount },
                 {"data",issues }
             };
+        }
+
+        protected override Panel ShowDetailPanel(object Object)
+        {
+            issue Issue = (issue)Object;
+            Panel DetailPanel = new Panel();
+            Control[] DetailsCol = new Control[7 * (Issue.book_issue.Count + 1)];
+            //update
+            string[] ColumnLabels = { "No", "IssueId", "RecId", "Title", "", "Returned", Issue.type.Trim() + " item id" };
+            for (int i = 0; i < ColumnLabels.Length; i++)
+            {
+                DetailsCol[i] = new TitleLabel(11) { Text = ColumnLabels[i] };
+            }
+            int ControlIndex = 7;
+            for (int i = 0; i < Issue.book_issue.Count; i++)
+            {
+                book_issue BS = Issue.book_issue[i];
+
+                if (Issue.type.Trim().Equals("issue"))
+                {
+                    Dictionary<string, object> CheckReturnResponse = Transaction.FetchObj(0, 0, Transaction.URL, "checkReturnedBook", AppUser, new Dictionary<string, object>()
+                        {
+                            {"book_issue_id",BS.id }
+                        });
+                    if (CheckReturnResponse["result"].ToString() == "0")
+                    {
+                        BS.book_issue_id = StringUtil.JSONStringToMap(CheckReturnResponse["data"].ToString())["book_issue_id"].ToString();
+                    }
+                }
+
+                DetailsCol[ControlIndex++] = new Label() { Text = (i + 1).ToString() };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.id };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.book_record_id };
+                DetailsCol[ControlIndex++] = new TextBoxReadonly() { Text = BS.book_record.book.title };
+                DetailsCol[ControlIndex++] = new BlankControl() { Reserved = ReservedFor.BEFORE_HOR };
+                string Type = Issue.type.ToLower().Trim();
+                if (Type == ("return"))
+                {
+                    DetailsCol[ControlIndex++] = null;
+                }
+                else
+                {
+                    DetailsCol[ControlIndex++] = new Label() { Text = BS.book_return == 1 ? "yes " + BS.ref_issue : "No" };
+
+                }
+                DetailsCol[ControlIndex++] = new Label() { Text = BS.book_issue_id };
+            }
+            //
+            DetailPanel = ControlUtil.GeneratePanel(7, DetailsCol, 5, 80, 20, Color.Orange, 5, 250);
+
+            student Student = UserClient.StudentById(Issue.student_id, AppUser);
+
+            Panel StudentDetail = ControlUtil.GeneratePanel(1, new Control[]
+            {
+                new Label() {Text= Issue.type.ToUpper().Trim()+" ID"},
+                new TextBoxReadonly(13) {Text=Issue.id },
+                new Label() {Text= "Date" },
+                new TextBoxReadonly(13) {Text=Issue.date.ToString() },
+                new Label() {Text= "Student ID" },
+                new TextBoxReadonly(13) {Text=Student.id },
+                new Label() {Text= "Student Name" },
+                new TextBoxReadonly(13) {Text=Student.name },
+                new Label() {Text= "Student ClassId"},
+                new TextBoxReadonly(13) {Text=Student.class_id },
+            }, 5, 200, 17, Color.Yellow, 5, 5, 500);
+
+            Panel Wrapper = new Panel();
+            Wrapper.Controls.Add(StudentDetail);
+            Wrapper.Controls.Add(DetailPanel);
+            Wrapper.SetBounds(5, 5, 500, 500);
+
+            Wrapper.AutoScroll = false;
+            Wrapper.VerticalScroll.Visible = true;
+            Wrapper.VerticalScroll.Enabled = true;
+            Wrapper.AutoScroll = true;
+
+            return Wrapper;
         }
     }
 }

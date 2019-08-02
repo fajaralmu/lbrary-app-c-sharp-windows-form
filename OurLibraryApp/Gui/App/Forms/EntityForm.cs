@@ -1,5 +1,6 @@
 ﻿using OurLibrary.Models;
 using OurLibraryApp.Gui.App.Controls;
+using OurLibraryApp.Gui.App.Forms;
 using OurLibraryApp.Src.App.Access;
 using OurLibraryApp.Src.App.Data;
 using OurLibraryApp.Src.App.Utils;
@@ -18,10 +19,11 @@ namespace OurLibraryApp.Gui.App.Home
     {
         private PictureBox LoadingImg = new PictureBox() { Width = 300, Height = 300, SizeMode = PictureBoxSizeMode.StretchImage, ImageLocation = "https://i.giphy.com/3oEjI6SIIHBdRxXI40.gif" };
         private BaseData EntityData;
+        public static AddForm addForm;
         private Panel ListPanel;
         private Panel DetailPanel = new Panel();
         private Panel NavPanel;
-        private Panel ButtonsPanel = new Panel();
+        private Panel MiscPanel = new Panel();
 
         private Label InfoFilter = new Label();
         private TextBox InputOffset = new TextBox() { Text = "0" };
@@ -87,11 +89,19 @@ namespace OurLibraryApp.Gui.App.Home
             Panel PagingPanel = ControlUtil.GeneratePanel(6, FilterControls, 0, 110, 30, Color.Azure);
             Controls.Add(PagingPanel);
 
-            ButtonsPanel = ControlUtil.GeneratePanel(3, new Control[]
+            Button BtnAdd = new Button() { Text = "ADD" };
+            BtnAdd.Click += (o, e) =>
             {
-                new TitleLabel(13) {Text="Buttons Panel" }, null
-            }, 5, 130, 20,Color.Azure, 850, 10);
-            Controls.Add(ButtonsPanel);
+                addForm = new AddForm(EntityData.ShowAddForm(), EntityData);
+                addForm.Show();
+            };
+
+            MiscPanel = ControlUtil.GeneratePanel(3, new Control[]
+            {
+                new TitleLabel(13) {Text="Buttons Panel" }, BtnAdd
+            }, 5, 130, 20, Color.Azure, 850, 10);
+
+            Controls.Add(MiscPanel);
 
             DetailPanel.SetBounds(850, 130, Constant.DETAIL_PANEL_HEIGHT, Constant.DETAIL_PANEL_WIDTH);
             DetailPanel.AutoScroll = false;
@@ -112,7 +122,8 @@ namespace OurLibraryApp.Gui.App.Home
                 {
                     DetailPanel.Controls.Clear();
                     DetailPanel.Controls.Add(_DetailPanel);
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     MessageBox.Show("Server Error");
                 }

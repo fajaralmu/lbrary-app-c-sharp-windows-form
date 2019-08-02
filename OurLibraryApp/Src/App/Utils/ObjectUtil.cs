@@ -167,6 +167,16 @@ namespace OurLibraryApp.Src.App.Utils
             return ValidProp.ToArray<string>();
         }
 
+        public static object ConvertList(List<object> value, Type type)
+        {
+            IList list = (IList)Activator.CreateInstance(type);
+            foreach (var item in value)
+            {
+                list.Add(item);
+            }
+            return list;
+        }
+
         public static List<object> ICollectionToListObj(ICollection Collection)
         {
             List<object> List = new List<object>();
@@ -215,6 +225,31 @@ namespace OurLibraryApp.Src.App.Utils
         public static object GetValueFromProp(string propname, object Object)
         {
             return Object.GetType().GetProperty(propname).GetValue(Object);
+        }
+
+        public static Dictionary<string, object> FillMap(object OBJ)
+        {
+            Dictionary<string, object> Map = new Dictionary<string, object>();
+            foreach (PropertyInfo Prop in OBJ.GetType().GetProperties())
+            {
+                Map.Add(Prop.Name, GetValueFromProp(Prop.Name, OBJ));
+            }
+            return Map;
+        }
+
+        public static object GetObjectValues(string[] Props, object OriginalObj)
+        {
+            object NewObject = Activator.CreateInstance(OriginalObj.GetType());
+            for (int i = 0; i < Props.Length; i++)
+            {
+                string PropName = Props[i];
+                if (HasProperty(PropName, OriginalObj))
+                {
+                    object val = OriginalObj.GetType().GetProperty(PropName).GetValue(OriginalObj);
+                    NewObject.GetType().GetProperty(PropName).SetValue(NewObject, val);
+                }
+            }
+            return NewObject;
         }
     }
 }

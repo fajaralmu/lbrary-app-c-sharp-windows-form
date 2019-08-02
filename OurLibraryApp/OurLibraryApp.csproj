@@ -56,6 +56,7 @@
     <Compile Include="Gui\App\Controls\BlankControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Gui\App\Controls\ComboItem.cs" />
     <Compile Include="Gui\App\Controls\Constant.cs" />
     <Compile Include="Gui\App\Controls\CustomButton.cs">
       <SubType>Component</SubType>
@@ -67,6 +68,9 @@
     </Compile>
     <Compile Include="Gui\App\Controls\TitleLabel.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gui\App\Forms\AddForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Gui\App\Forms\AppForm.cs">
       <SubType>Form</SubType>
@@ -105,6 +109,10 @@
     <Compile Include="Src\App\Annotation\ActionAttribute.cs" />
     <Compile Include="Src\App\Annotation\FieldAttribute.cs" />
     <Compile Include="Src\App\Data\BaseData.cs" />
+    <Compile Include="Src\App\Data\AuthorData.cs" />
+    <Compile Include="Src\App\Data\PublisherData.cs" />
+    <Compile Include="Src\App\Data\ClassData.cs" />
+    <Compile Include="Src\App\Data\CategoryData.cs" />
     <Compile Include="Src\App\Data\Setting.cs" />
     <Compile Include="Src\App\Data\VisitData.cs" />
     <Compile Include="Src\App\Data\TransactionData.cs" />

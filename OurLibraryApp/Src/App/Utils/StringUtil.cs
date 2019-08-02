@@ -58,5 +58,25 @@ namespace OurLibraryApp.Src.App.Utils
                 return Dict;
             }
         }
+
+        public static DateTime StringToDateTime(string Str)
+        {
+            try
+            {
+                Str = Str.Replace("AM", "");
+                Str = Str.Replace("PM", "");
+                DateTime Date = new DateTime();
+                //string[] DateNTime = Str.Split(' ');
+                //string[] DateField = DateNTime[0].Split('/');
+                //string[] TimeField = DateNTime[1].Split(':');
+                DateTime.TryParse(Str, out Date);
+                return Date;
+
+            }
+            catch (Exception e)
+            {
+                return DateTime.Now;
+            }
+        }
     }
 }
