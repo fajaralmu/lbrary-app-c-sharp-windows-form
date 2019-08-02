@@ -13,8 +13,11 @@ using System.Windows.Forms;
 
 namespace OurLibraryApp.Src.App.Data
 {
-    class CategoryData : BaseData {
+    class CategoryData : BaseData
+    {
 
+        private TextBox InputID = new TextBox();
+        private TextBox InputCategoryName = new TextBox();
         private List<category> categorys = new List<category>();
 
         public CategoryData(AppUser AppUser) : base("categoryList")
@@ -59,7 +62,7 @@ namespace OurLibraryApp.Src.App.Data
                     TotalCount = (int)categoryMap["count"];
                     break;
                 }
-              
+
                 category category = (category)ObjectUtil.FillObjectWithMap(new category(), categoryMap);
                 categorys.Add(category);
             }
@@ -71,6 +74,62 @@ namespace OurLibraryApp.Src.App.Data
             };
         }
 
-       
+        public override Panel ShowAddForm(object Object = null)
+        {
+            category EditCategory = (category)Object;
+            bool EditState = EditCategory != null;
+            ClearAllFields();
+            //  UpdateList();
+            Button BtnAdd = new Button() { Text = "Add" };
+
+            BtnAdd.Click += (e, o) =>
+            {
+
+                category Category = new category()
+                {
+                    id = EditState ? InputID.Text : null,
+                    category_name = InputCategoryName.Text.Trim(),
+                    books = null
+
+                };
+                if (null != UserClient.AddCategory(Category, AppUser))
+                {
+                    MessageBox.Show("Success");
+                    EntityForm.Navigate(0, 0);
+                }
+                else
+                {
+                    MessageBox.Show("Failed");
+                }
+            };
+            InputID.Enabled = false;
+            InputID.Text = "GENERATED";
+
+            if (EditState)
+            {
+                InputID.Text = EditCategory.id;
+                InputCategoryName.Text = EditCategory.category_name.Trim();
+
+            }
+
+            Control[] Controls = new Control[]
+            {
+                new TitleLabel(20) {Text="Add Category" },new BlankControl(),
+                 new Label() {Text="ID" }, InputID,
+                new Label() {Text="Name" }, InputCategoryName,
+                      BtnAdd, null
+            };
+
+            return ControlUtil.GeneratePanel(2, Controls, 5, 180, 30, Color.Aqua);
+        }
+
+        protected override void ClearAllFields()
+        {
+            InputID.Clear();
+            InputCategoryName.Clear();
+
+        }
+
+
     }
 }

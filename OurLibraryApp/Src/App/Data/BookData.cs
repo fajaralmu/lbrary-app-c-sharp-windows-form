@@ -151,7 +151,7 @@ namespace OurLibraryApp.Src.App.Data
             {
                 book Book = new book()
                 {
-                    id = EditState? InputID.Text :null,
+                    id = EditState ? InputID.Text : null,
                     title = InputTitle.Text.Trim(),
                     review = InputReview.Text.Trim(),
                     page = int.Parse(InputPage.Text.Trim()),
@@ -213,19 +213,19 @@ namespace OurLibraryApp.Src.App.Data
             foreach (publisher PUB in PublisherDataList)
             {
                 publisher Pub = PUB;
-                ComboboxItem Item = new ComboboxItem(Pub.name, Pub.id);
+                ComboboxItem Item = new ComboboxItem(Pub.name.Trim(), Pub.id);
                 PublisherList.Items.Add(Item);
             }
             foreach (category CAT in CategoryDataList)
             {
                 category Cat = new category() { id = CAT.id, category_name = CAT.category_name };
-                ComboboxItem Item2 = new ComboboxItem(Cat.category_name, Cat.id);
+                ComboboxItem Item2 = new ComboboxItem(Cat.category_name.Trim(), Cat.id);
                 CategoryList.Items.Add(Item2);
             }
             for (int i = 0; i < AuthorDataList.Count; i++)
             {
                 author Author = AuthorDataList.ElementAt(i);
-                ComboboxItem Item3 = new ComboboxItem(i + Author.name, Author.id);
+                ComboboxItem Item3 = new ComboboxItem(Author.name.Trim(), Author.id);
                 AuthorList.Items.Add(Item3);
             }
 

@@ -200,6 +200,7 @@ namespace OurLibraryApp.Src.App.Access
             return Params;
         }
 
+
         public static book AddBook(book Book, AppUser AppUser)
         {
             Dictionary<string, object> Params = ObjectUtil.FillMap(Book);
@@ -213,6 +214,7 @@ namespace OurLibraryApp.Src.App.Access
             }
             return null;
         }
+
         public static student AddStudent(student Student, AppUser AppUser)
         {
             Dictionary<string, object> Params = ObjectUtil.FillMap(Student);
@@ -226,6 +228,63 @@ namespace OurLibraryApp.Src.App.Access
             }
             return null;
         }
+
+        public static publisher AddPublisher(publisher publisher, AppUser AppUser)
+        {
+            Dictionary<string, object> Params = ObjectUtil.FillMap(publisher);
+            Dictionary<string, object> RespPost = Transaction.PostInput(Transaction.URL, "addPublisher", AppUser, Params);
+            if (RespPost != null && RespPost["result"].ToString() == "0")
+            {
+                Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespPost["data"].ToString());
+                Dictionary<string, object> publisherMap = StringUtil.JSONStringToMap(DataMap["publisher"].ToString());
+                publisher Newpublisher = (publisher)ObjectUtil.FillObjectWithMap(new publisher(), publisherMap);
+                return Newpublisher;
+            }
+            return null;
+        }
+
+        public static category AddCategory(category category, AppUser AppUser)
+        {
+            Dictionary<string, object> Params = ObjectUtil.FillMap(category);
+            Dictionary<string, object> RespPost = Transaction.PostInput(Transaction.URL, "addCategory", AppUser, Params);
+            if (RespPost != null && RespPost["result"].ToString() == "0")
+            {
+                Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespPost["data"].ToString());
+                Dictionary<string, object> categoryMap = StringUtil.JSONStringToMap(DataMap["category"].ToString());
+                category Newcategory = (category)ObjectUtil.FillObjectWithMap(new category(), categoryMap);
+                return Newcategory;
+            }
+            return null;
+        }
+
+        public static author AddAuthor(author author, AppUser AppUser)
+        {
+            Dictionary<string, object> Params = ObjectUtil.FillMap(author);
+            Dictionary<string, object> RespPost = Transaction.PostInput(Transaction.URL, "addAuthor", AppUser, Params);
+            if (RespPost != null && RespPost["result"].ToString() == "0")
+            {
+                Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespPost["data"].ToString());
+                Dictionary<string, object> authorMap = StringUtil.JSONStringToMap(DataMap["author"].ToString());
+                author Newauthor = (author)ObjectUtil.FillObjectWithMap(new author(), authorMap);
+                return Newauthor;
+            }
+            return null;
+        }
+
+        public static @class AddClass(@class @class, AppUser AppUser)
+        {
+            Dictionary<string, object> Params = ObjectUtil.FillMap(@class);
+            Dictionary<string, object> RespPost = Transaction.PostInput(Transaction.URL, "addClass", AppUser, Params);
+            if (RespPost != null && RespPost["result"].ToString() == "0")
+            {
+                Dictionary<string, object> DataMap = StringUtil.JSONStringToMap(RespPost["data"].ToString());
+                Dictionary<string, object> ClassMap = StringUtil.JSONStringToMap(DataMap["class"].ToString());
+                @class NewClass = (@class)ObjectUtil.FillObjectWithMap(new @class(), ClassMap);
+                return NewClass;
+            }
+            return null;
+        }
+
 
         public static student StudentById(string Id, AppUser AppUser)
         {
@@ -266,7 +325,7 @@ namespace OurLibraryApp.Src.App.Access
                 return new List<Dictionary<string, object>>();
             }
 
-           return objListMap;
+            return objListMap;
         }
 
         public static book_record BookRecById(string Id, AppUser AppUser)
@@ -283,7 +342,7 @@ namespace OurLibraryApp.Src.App.Access
             }
             return null;
         }
-        
+
         public static List<publisher> PublisherList(AppUser AppUser, int Offset, int Limit, Dictionary<string, object> Params)
         {
             List<publisher> publishers = new List<publisher>();
@@ -331,7 +390,7 @@ namespace OurLibraryApp.Src.App.Access
         public static List<@class> ClassList(AppUser AppUser, int Offset, int Limit, Dictionary<string, object> Params)
         {
             List<@class> classs = new List<@class>();
-            List<Dictionary<string, object>> classListMap = UniversalObjList(AppUser, Offset, Limit, Params, "classList"); 
+            List<Dictionary<string, object>> classListMap = UniversalObjList(AppUser, Offset, Limit, Params, "classList");
             if (classListMap == null || classListMap.Count == 0)
             {
                 return classs;

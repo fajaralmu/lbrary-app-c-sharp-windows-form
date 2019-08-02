@@ -15,6 +15,11 @@ namespace OurLibraryApp.Src.App.Data
 {
     class AuthorData : BaseData {
 
+        private TextBox InputID = new TextBox();
+        private TextBox InputAuthorName = new TextBox();
+        private TextBox InputEmail = new TextBox();
+        private TextBox InputPhone = new TextBox();
+        private TextBox InputAddress = new TextBox();
         private List<author> authors = new List<author>();
 
         public AuthorData(AppUser AppUser) : base("authorList")
@@ -70,7 +75,73 @@ namespace OurLibraryApp.Src.App.Data
                 {"data",authors }
             };
         }
+        public override Panel ShowAddForm(object Object = null)
+        {
+            author EditAuthor = (author)Object;
+            bool EditState = EditAuthor != null;
+            ClearAllFields();
+            //  UpdateList();
+            Button BtnAdd = new Button() { Text = "Add" };
 
-       
+            BtnAdd.Click += (e, o) =>
+            {
+
+                author Author = new author()
+                {
+                    id = EditState ? InputID.Text : null,
+                    name = InputAuthorName.Text.Trim(),
+                    phone = InputPhone.Text.Trim(),
+                    email = InputEmail.Text.Trim(),
+                    address = InputAddress.Text.Trim(),
+                    books = null
+
+                };
+                if (null != UserClient.AddAuthor(Author, AppUser))
+                {
+                    MessageBox.Show("Success");
+                    EntityForm.Navigate(0, 0);
+                }
+                else
+                {
+                    MessageBox.Show("Failed");
+                }
+            };
+            InputID.Enabled = false;
+            InputID.Text = "GENERATED";
+
+            if (EditState)
+            {
+                InputID.Text = EditAuthor.id;
+                InputAuthorName.Text = EditAuthor.name.Trim();
+                InputAddress.Text = EditAuthor.address.Trim();
+                InputPhone.Text = EditAuthor.phone.Trim();
+                InputEmail.Text = EditAuthor.email.Trim();
+
+            }
+
+            Control[] Controls = new Control[]
+            {
+                new TitleLabel(20) {Text="Add Author" },new BlankControl(),
+                 new Label() {Text="ID" }, InputID,
+                new Label() {Text="Name" }, InputAuthorName,
+                 new Label() {Text="Email" }, InputEmail,
+                  new Label() {Text="Phone" }, InputPhone,
+                   new Label() {Text="Address" }, InputAddress,
+                      BtnAdd, null
+            };
+
+            return ControlUtil.GeneratePanel(2, Controls, 5, 180, 30, Color.Aqua);
+        }
+
+        protected override void ClearAllFields()
+        {
+            InputID.Clear();
+            InputAuthorName.Clear();
+            InputAddress.Clear();
+            InputEmail.Clear();
+            InputPhone.Clear();
+
+        }
+
     }
 }

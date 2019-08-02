@@ -15,6 +15,8 @@ namespace OurLibraryApp.Src.App.Data
 {
     class ClassData : BaseData {
 
+        private TextBox InputID = new TextBox();
+        private TextBox InputClassName = new TextBox();
         private List<@class> @classs = new List<@class>();
 
         public ClassData(AppUser AppUser) : base("classList")
@@ -71,6 +73,63 @@ namespace OurLibraryApp.Src.App.Data
             };
         }
 
-       
+        public override Panel ShowAddForm(object Object = null)
+        {
+            @class EditClass = (@class)Object;
+            bool EditState = EditClass != null;
+            ClearAllFields();
+            //  UpdateList();
+            Button BtnAdd = new Button() { Text = "Add" };
+
+            BtnAdd.Click += (e, o) =>
+            {
+
+                @class Class = new @class()
+                {
+                    id = EditState ? InputID.Text : null,
+                    class_name = InputClassName.Text.Trim(),
+                   students = null
+
+                };
+                if (null != UserClient.AddClass(Class, AppUser))
+                {
+                    MessageBox.Show("Success");
+                    EntityForm.Navigate(0, 0);
+                }
+                else
+                {
+                    MessageBox.Show("Failed");
+                }
+            };
+            InputID.Enabled = false;
+            InputID.Text = "GENERATED";
+
+            if (EditState)
+            { 
+                InputID.Text = EditClass.id;
+                InputClassName.Text = EditClass.class_name.Trim();
+
+            }
+
+            Control[] Controls = new Control[]
+            {
+                new TitleLabel(20) {Text="Add Class" },new BlankControl(),
+                 new Label() {Text="ID" }, InputID,
+                new Label() {Text="Name" }, InputClassName,
+                      BtnAdd, null
+            };
+
+            return ControlUtil.GeneratePanel(2, Controls, 5, 180, 30, Color.Aqua);
+        }
+
+        protected override void ClearAllFields()
+        {
+            InputID.Clear();
+            InputClassName.Clear();
+
+        }
+
+
+
     }
 }

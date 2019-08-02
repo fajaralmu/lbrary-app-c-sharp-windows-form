@@ -15,6 +15,10 @@ namespace OurLibraryApp.Src.App.Data
 {
     class PublisherData : BaseData {
 
+        private TextBox InputID = new TextBox();
+        private TextBox InputPublisherName = new TextBox();
+        private TextBox InputContact = new TextBox();
+        private TextBox InputAddress = new TextBox();
         private List<publisher> publishers = new List<publisher>();
 
         public PublisherData(AppUser AppUser) : base("publisherList")
@@ -23,6 +27,7 @@ namespace OurLibraryApp.Src.App.Data
             ListObjServiceName = "publisherList";
             Entity = typeof(publisher);
         }
+
         public PublisherData(string Name, AppUser AppUser) : base("publisherList")
         {
             this.AppUser = AppUser;
@@ -71,6 +76,70 @@ namespace OurLibraryApp.Src.App.Data
             };
         }
 
-       
+        public override Panel ShowAddForm(object Object = null)
+        {
+            publisher EditPublisher = (publisher)Object;
+            bool EditState = EditPublisher != null;
+            ClearAllFields();
+            //  UpdateList();
+            Button BtnAdd = new Button() { Text = "Add" };
+
+            BtnAdd.Click += (e, o) =>
+            {
+
+                publisher Publisher = new publisher()
+                {
+                    id = EditState ? InputID.Text : null,
+                    name = InputPublisherName.Text.Trim(),
+                    contact = InputContact.Text.Trim(),
+                    address = InputAddress.Text.Trim(),
+                    books = null
+
+                };
+                if (null != UserClient.AddPublisher(Publisher, AppUser))
+                {
+                    MessageBox.Show("Success");
+                    EntityForm.Navigate(0, 0);
+                }
+                else
+                {
+                    MessageBox.Show("Failed");
+                }
+            };
+            InputID.Enabled = false;
+            InputID.Text = "GENERATED";
+
+            if (EditState)
+            {
+                InputID.Text = EditPublisher.id;
+                InputPublisherName.Text = EditPublisher.name.Trim();
+                InputAddress.Text = EditPublisher.address.Trim();
+                InputContact.Text = EditPublisher.contact.Trim();
+
+            }
+
+            Control[] Controls = new Control[]
+            {
+                new TitleLabel(20) {Text="Add Publisher" },new BlankControl(),
+                 new Label() {Text="ID" }, InputID,
+                new Label() {Text="Name" }, InputPublisherName,
+                 new Label() {Text="Contact" }, InputContact,
+                   new Label() {Text="Address" }, InputAddress,
+                      BtnAdd, null
+            };
+
+            return ControlUtil.GeneratePanel(2, Controls, 5, 180, 30, Color.Aqua);
+        }
+
+        protected override void ClearAllFields()
+        {
+            InputID.Clear();
+            InputPublisherName.Clear();
+            InputAddress.Clear();
+            InputContact.Clear();
+
+        }
+
+
     }
 }
