@@ -104,7 +104,12 @@ namespace OurLibraryApp.Src.App.Utils
             ComboBox Cbx = new ComboBox();
             for(int i = begin; i <= end; i++)
             {
-                Cbx.Items.Add(i);
+                string ItemVal = i.ToString();
+                if (i < 10)
+                {
+                    ItemVal = "0" + i;
+                }
+                Cbx.Items.Add(ItemVal);
             }
             return Cbx;
         }
